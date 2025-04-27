@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" translate="no">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>El Pollo Loco</title>
+    <link rel="icon" type="image/x-icon" href="./icons/favicon.ico">
 
     <link rel="stylesheet" href="./style.css">
-
 
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/moveable-object.class.js"></script>
@@ -18,12 +19,14 @@
     <script src="./models/world.class.js"></script>
     <script src="./models/background-object.class.js"></script>
     <script src="./models/keyboard.class.js"></script>
+    <script src="./models/sound.class.js"></script>
     <script src="./models/level.class.js"></script>
     <script src="./models/throwable-object.class.js"></script>
     <script src="./models/endboss.class.js"></script>
     <script src="./models/levels/level1.js"></script>
+    <script src="./models/exit-game.class.js"></script>
     <script src="./scripts/game.js"></script>
-    <script src="./script.js"></script>
+    <script src="./scripts/start-screen.js"></script>
 
 </head>
 
@@ -31,6 +34,86 @@
 
     <h1>El Pollo Loco</h1>
     <canvas id="canvas" width="720px" height="480px"></canvas>
+
+    <div id="start-screen">
+        <div class="start-screen-buttons">
+            <div class="menu-buttons" id="start-button" onclick="startGame()">Start</div>
+            <div class="menu-buttons" id="game-settings-button" onclick="showgameSettings()">Game Settings</div>
+            <div class="menu-buttons" id="impressum-button" onclick="openImpressum()">Legal Notice</div>
+        </div>
+        <div class="fullscreen">
+            <img id="fullscreen-btn" onclick="toggleFullscreen()" src="./icons/maximize.png" alt="fullscreen">
+        </div>
+        <div class="volume">
+            <img id="volume-btn" onclick="toggleMusic()" src="./icons/volume-mute.png" alt="volume-mute">
+            <audio id="bg-music" src="./audio/background-music.mp3" loop></audio>
+        </div>
+    </div>
+
+    <div id="game-settings">
+        <img onclick="backToMenu()" src="icons/back-to-menu.png" alt="back">
+        <div class="settings">
+            <div class="setting-menu">
+                <div>
+                    <p id="keyboard-layout" class="activ" onclick="switchSettings(1)">Keyboard <br>Layout</p>
+                    <p id="audio-settings" onclick="switchSettings(2)">Audio <br>Settings</p>
+                </div>
+                <div class="seperator"></div>
+            </div>
+            <div id="display-keyboard-layout">
+                <div>
+                    <p>Arrow Left = move left</p>
+                    <p>Arrow Right = move right</p>
+                    <p>Arrow Up = jump</p>
+                </div>
+                <div>
+                    <p>Spacebar = throw bottle</p>
+                    <p>ESC = Leave the Game</p>
+                </div>
+            </div>
+            <div id="display-audio-settings">
+                <div class="audio-setting">
+                    <p>Background Music</p>
+                    <div class="control">
+                        <button onclick="changeVolume(this, -10)">−</button>
+                        <progress id="bg-music-volume" value="10" max="100"></progress>
+                        <button onclick="changeVolume(this, 10)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="impressum-site">
+        <img onclick="backToMenu()" src="icons/back-to-menu.png" alt="back">
+        <div class="impressum-position">
+            <h3>Legal Notice</h3>
+
+            <p><strong>Information in accordance with Section 5 of the German Telemedia Act (TMG):</strong></p>
+            <p>Max Mustermann<br>
+                Musterstraße 1<br>
+                12345 Musterstadt<br>
+                Germany</p>
+
+            <p><strong>Contact:</strong></p>
+            <p>Phone: +49 1234 567890<br>
+                Email: max@mustermann.de</p>
+
+            <p><strong>Responsible for content according to Section 55, Paragraph 2 of the German Interstate
+                    Broadcasting Agreement (RStV):</strong><br>
+                Max Mustermann<br>
+                Musterstraße 1<br>
+                12345 Musterstadt</p>
+
+            <div class="section">
+                <h2>Media Credits</h2>
+                <p>All images and sound files used on this site are sourced from <a href="https://pixabay.com"
+                        target="_blank" rel="noopener noreferrer">Pixabay</a>, <a href="https://www.flaticon.com/"
+                        target="_blank" rel="noopener noreferrer">Flaticon</a> and are free to use under the Pixabay and
+                    Flaticon License.</p>
+            </div>
+        </div>
+    </div>
 
 </body>
 

@@ -65,7 +65,20 @@ class MoveableObject extends DrawableObject {
         this.x -= this.speed;
     }
 
-    jump() {
-        this.speedY = 30;
+    isIdle() {
+        if (!this.world.keyboard.UP && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && (this.afkTimeInSeconds < this.timeToBeAfk)) {
+            setInterval(() => {
+                this.afkTimeInSeconds++;
+            }, 1000);
+            return true;
+        }
     }
+
+    isLongIdle() {
+        if (!this.world.keyboard.UP && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && (this.afkTimeInSeconds > this.timeToBeAfk)) {
+            return true;
+        }
+    }
+
+
 }

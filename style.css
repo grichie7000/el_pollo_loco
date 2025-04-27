@@ -1,7 +1,8 @@
 @font-face {
     font-family: 'zabras';
     src: url('./fonts/Zabars.ttf') format('truetype');
-  }
+}
+
 
 body {
     font-family: 'zabras', Arial, Helvetica, sans-serif;
@@ -15,9 +16,12 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    font-size: 32px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
-h1{
+h1 {
     font-size: 72px;
     letter-spacing: 5px;
     text-shadow: 4px 2px 2px rgba(0, 0, 0, 0.5);
@@ -25,21 +29,261 @@ h1{
 
 canvas {
     background-color: black;
-    display: block;
+    display: none;
 }
 
-@media only screen and (max-width: 720px){
+#start-screen {
+    height: 405px;
+    width: 720px;
+    background-image: url('img/9_intro_outro_screens/start/startscreen_1.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    position: relative;
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.start-screen-buttons {
+    display: flex;
+    justify-content: space-around;
+    flex: 1;
+}
+
+.fullscreen img {
+    height: 36px;
+    position: absolute;
+    bottom: 9px;
+    right: 20px;
+    transition: transform 0.3s;
+}
+
+.fullscreen img:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.volume img {
+    height: 32px;
+    position: absolute;
+    bottom: 12px;
+    right: 76px;
+    transition: transform 0.3s;
+}
+
+.volume img:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+
+.disappear {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.menu-buttons {
+    margin-top: 44px;
+    background: linear-gradient(to bottom, #ffca1acf 0%, #ffde01e3 50%, #91886cad 100%);
+    height: 34px;
+    padding: 8px 24px;
+    border-radius: 16px;
+    transition: transform 0.4s, box-shadow 0.3s ease;
+}
+
+.menu-buttons:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.596);
+}
+
+#start-button {
+    animation: pulse 1s infinite;
+    display: inline-block;
+    transition: box-shadow 0.3s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0px rgba(0, 123, 255, 0);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.589);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0px rgba(0, 123, 255, 0);
+    }
+}
+
+#game-settings {
+    height: 480px;
+    width: 720px;
+    position: relative;
+    display: none;
+    flex-direction: column;
+}
+
+#game-settings img {
+    width: 168px;
+    position: absolute;
+    right: 0px;
+    bottom: 138px;
+    transition: transform 0.4s;
+}
+
+#game-settings img:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.seperator {
+    height: 380px;
+    width: 2px;
+    background: linear-gradient(to bottom, #ffca1acf 0%, #ffde01e3 50%, #91886cad 100%);
+    box-shadow: 5px 1px 8px #000000;
+}
+
+.settings {
+    display: flex;
+    gap: 32px;
+}
+
+.setting-menu {
+    display: flex;
+    gap: 8px;
+}
+
+.setting-menu p {
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: transform 0.4s;
+}
+
+.setting-menu p:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.activ {
+    background: linear-gradient(to bottom, #ffca1acf 0%, #ffde01e3 50%, #91886cad 100%);
+}
+
+#display-audio-settings {
+    display: none;
+    flex-direction: column;
+
+}
+
+#display-audio-settings p {
+    margin-bottom: 4px;
+}
+
+.control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+progress {
+    width: 240px;
+    height: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #333;
+    box-shadow: inset 0 0 5px #000;
+  }
+  
+  progress::-webkit-progress-bar {
+    background-color: #333;
+  }
+
+  progress::-webkit-progress-bar {
+    background-color: #333;
+}
+  
+  progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #00f2ff, #0072ff);
+    transition: width 0.3s ease;
+  }
+  
+  progress::-moz-progress-bar {
+    background: linear-gradient(90deg, #00f2ff, #0072ff);;
+    transition: width 0.3s ease;
+  }
+
+.audio-setting button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #0072ff;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.audio-setting button:hover {
+  background: #00f2ff;
+  box-shadow: 0 0 5px #00f2ff;
+}
+
+
+#impressum-site {
+    display: none;
+    position: relative;
+    height: 480px;
+    width: 720px;
+}
+
+#impressum-site img {
+    width: 168px;
+    position: absolute;
+    right: 0px;
+    bottom: 144px;
+    transition: transform 0.4s;
+}
+
+#impressum-site img:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.impressum-position{
+    color: white;
+    border-radius: 16px;
+    padding: 12px;
+    width: 470px;
+    height: 410px;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow-y: scroll;
+    text-shadow: none;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+@media only screen and (max-width: 720px) {
     canvas {
         width: 100%;
     }
+
+
 }
 
-@media only screen and (max-height: 480px){
+@media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
     }
+}
 
-    h1{
+@media (max-height: 720px) {
+
+    h1 {
         display: none;
     }
+
 }
