@@ -1,18 +1,27 @@
 class DrawableObject {
     x = 120;
-    y = 280;
+    y = 120;
     width = 100;
-    height = 150;
+    height = 100;
+
     currentImage = 0;
     img;
     imageCache = {};
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken) {
+        if (this instanceof Character || this instanceof Chicken || this instanceof Coins) {
+            const offsetX = this instanceof Character ? this.hitboxOffsetX || 0 : this.collisionOffsetX || 0;
+            const offsetY = this instanceof Character ? this.hitboxOffsetY || 0 : this.collisionOffsetY || 0;
+
             ctx.beginPath();
-            ctx.lineWidth = '5';
+            ctx.lineWidth = '2';
             ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.rect(
+                this.x + offsetX,
+                this.y + offsetY,
+                this.width - 2 * offsetX,
+                this.height - 2 * offsetY
+            );
             ctx.stroke();
         }
     }

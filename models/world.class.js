@@ -6,7 +6,9 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar();
+    statusBarHP = new StatusBar();
+    statusBarCoins = new StatusBar();
+    statusBarBottles = new StatusBar();
     exitGame = new ExitGame();
     throwableObjects = [];
 
@@ -27,6 +29,7 @@ class World {
         setInterval(() => {
             this.checkCollision();
             this.checkThrowObjects();
+            this.checkCoinCollected();
         }, 200);
     }
 
@@ -41,10 +44,21 @@ class World {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+                this.statusBarHP.setPercentage(this.character.energy);
             }
         });
     }
+
+    checkCoinCollected(){
+        this.level.coins.forEach(coin => {
+            if (this.character.isColliding(coin)) {
+                // this.character.hit();
+                console.log('hit')
+                this.statusBarHP.setPercentage(this.character.energy);
+            }
+        });
+    }
+
 
     draw() {
 
@@ -55,12 +69,13 @@ class World {
 
 
         this.addToMap(this.character);
+        this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
 
         //---space for fixed Objects---
         this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarHP);
         this.addToMap(this.exitGame);
         this.ctx.translate(this.camera_x, 0);
 

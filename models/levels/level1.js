@@ -5,8 +5,6 @@ function initLevel() {
     level1 = new Level(
         [
             new Chicken(),
-            new Chicken(),
-            new Chicken(),
             new Endboss()
         ],
 
@@ -37,6 +35,14 @@ function initLevel() {
             new BackgroundObject('./img/5_background/layers/3_third_layer/2.png', 719 * 3),
             new BackgroundObject('./img/5_background/layers/2_second_layer/2.png', 719 * 3),
             new BackgroundObject('./img/5_background/layers/1_first_layer/2.png', 719 * 3),
+        ],
+
+        [
+            new Coins (360),
+            new Coins (720),
+            new Coins (1080),
+            new Coins (1440),
+            new Coins (1800)
         ]
     );
 }
