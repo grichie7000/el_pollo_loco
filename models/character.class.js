@@ -77,6 +77,9 @@ class Character extends MoveableObject {
 
     constructor() {
         super().loadImage('./img/2_character_pepe/2_walk/W-21.png')
+        this.coins = 1;
+        this.bottles = 1;
+        this.maxBottles = 5;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);

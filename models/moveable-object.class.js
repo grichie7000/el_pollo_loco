@@ -38,13 +38,10 @@ class MoveableObject extends DrawableObject {
             this.y + this.height - offsetCharY > mo.y + offsetY;
     }
 
+
     hit() {
-        this.energy -= 5;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
-            this.lastHit = new Date().getTime();
-        }
+        this.energy -= 20;
+        this.energy = Math.max(0, this.energy); // Kein negativer Wert
     }
 
     isHurt() {
