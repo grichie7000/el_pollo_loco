@@ -7,6 +7,7 @@ class ExitGame extends DrawableObject {
     constructor() {
         super();
         this.loadImages(this.IMAGES);
+        this.loadImage(this.GAME_OVER)
         this.setIcon()
         canvas.addEventListener('click', (event) => this.handleClick(event));
         canvas.addEventListener('mousemove', (event) => this.handleMouseMove(event));

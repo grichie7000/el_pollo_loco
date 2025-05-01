@@ -48,11 +48,11 @@ function initLevel() {
             new Coins (1800)
         ],
         [
-            new Bottles (360),
-            new Bottles (720),
-            new Bottles (1080),
-            new Bottles (1440),
-            new Bottles (1800)
+            new Bottles (340),
+            new Bottles (760),
+            new Bottles (1020),
+            new Bottles (1490),
+            new Bottles (1750)
         ]
     );
 }

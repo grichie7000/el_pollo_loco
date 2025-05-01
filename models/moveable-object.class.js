@@ -19,7 +19,7 @@ class MoveableObject extends DrawableObject {
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return true;
+            return this.y < 350;
         } else {
             return this.y < 120;
         }
@@ -40,13 +40,17 @@ class MoveableObject extends DrawableObject {
 
 
     hit() {
+
         this.energy -= 20;
-        this.energy = Math.max(0, this.energy); // Kein negativer Wert
+        this.energy = Math.max(0, this.energy);
+        this.lastHit = new Date().getTime();
     }
 
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit;
+        const now = new Date().getTime();
+        let timepassed = now - this.lastHit;
         timepassed = timepassed / 1000;
+
         return timepassed < 1;
     }
 

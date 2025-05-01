@@ -7,6 +7,7 @@ class World {
     keyboard;
     camera_x = 0;
     healthCooldown = 0;
+    lastBottleThrow = 0;
     healthBar = new StatusBar(100,
         [
             'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
@@ -39,7 +40,6 @@ class World {
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
-
         ],
         30, 0
     );
@@ -47,15 +47,15 @@ class World {
     exitGame = new ExitGame();
     throwableObjects = [];
 
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.character.bottles = 0;
         this.draw();
         this.setWorld();
         this.run();
-        console.log(this.healthBar);
-
     }
 
     setWorld() {
@@ -65,20 +65,14 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollision();
-            this.checkThrowObjects();
             this.checkCoinCollected();
             this.checkBottleCollected()
+            this.checkThrowObjects();
         }, 200);
     }
 
-    checkThrowObjects() {
-        if (this.keyboard.D) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-            this.throwableObjects.push(bottle);
-        }
-    }
-
     checkCollision() {
+
         let currentTime = Date.now();
         let cooldownTime = 1000;
 
@@ -109,19 +103,30 @@ class World {
                 this.character.bottles++;
                 let percent = (this.character.bottles / this.character.maxBottles) * 100;
                 this.bottleBar.setPercentage(percent);
+                console.log(percent);
+
                 this.level.bottles.splice(index, 1);
             }
         });
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D && this.character.bottles > 0) {
+        const now = Date.now();
+        const throwCooldown = 800;
+
+        if (
+            this.keyboard.D &&
+            this.character.bottles > 0 &&
+            now - this.lastBottleThrow > throwCooldown
+        ) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
 
             this.character.bottles--;
             let percent = (this.character.bottles / this.character.maxBottles) * 100;
             this.bottleBar.setPercentage(percent);
+
+            this.lastBottleThrow = now;
         }
     }
 
@@ -157,6 +162,11 @@ class World {
         requestAnimationFrame(function () {
             self.draw()
         });
+    }
+
+
+    gameOver(){
+
     }
 
     addObjectsToMap(objects) {

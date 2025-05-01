@@ -92,4 +92,5 @@ function getElements() {
     volumeBtn = document.getElementById('volume-btn');
     audioSettings = document.getElementById('audio-settings');
     keyboardLayout = document.getElementById('keyboard-layout');
+    gameOverScreen  = document.getElementById('game-over');
 }

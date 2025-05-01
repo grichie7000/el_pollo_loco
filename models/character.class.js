@@ -7,7 +7,7 @@ class Character extends MoveableObject {
     y = 0;
     speed = 10;
     afkTimeInSeconds = 0;
-    timeToBeAfk = 100;
+    timeToBeAfk = 200;
     jumpSound = new Sounds('audio/jump.mp3', 0.1)
     walkSound = new Sounds('audio/walking.mp3', 0.1)
 
@@ -74,6 +74,7 @@ class Character extends MoveableObject {
     ]
 
     world;
+    gameOverImage; 
 
     constructor() {
         super().loadImage('./img/2_character_pepe/2_walk/W-21.png')
@@ -128,6 +129,9 @@ class Character extends MoveableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
+                setTimeout(() => {
+                    gameOver();
+                }, 1000);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT)
             } else if (this.isAboveGround()) {

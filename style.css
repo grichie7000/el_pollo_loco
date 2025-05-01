@@ -49,6 +49,34 @@ canvas {
     flex: 1;
 }
 
+.game-over-screen {
+    height: 405px;
+    width: 720px;
+    display: none;
+    position: relative;
+}
+
+
+.game-over-screen img {
+    height: 379px;
+    width: 701px;
+}
+
+.game-over-screen p {
+    padding: 12px;
+    position: absolute;
+    bottom: 0;
+    border: 2px solid #d5d5364d;
+    background-color: #d5d5364d;
+    border-radius: 10px;
+}
+
+.game-over-screen p:hover {
+ cursor: pointer;
+ text-decoration: underline;
+}
+
+
 .fullscreen img {
     height: 36px;
     position: absolute;
@@ -186,7 +214,7 @@ canvas {
     display: flex;
     align-items: center;
     gap: 10px;
-  }
+}
 
 progress {
     width: 240px;
@@ -195,41 +223,42 @@ progress {
     -webkit-appearance: none;
     background-color: #333;
     box-shadow: inset 0 0 5px #000;
-  }
-  
-  progress::-webkit-progress-bar {
-    background-color: #333;
-  }
+}
 
-  progress::-webkit-progress-bar {
+progress::-webkit-progress-bar {
     background-color: #333;
 }
-  
-  progress::-webkit-progress-value {
+
+progress::-webkit-progress-bar {
+    background-color: #333;
+}
+
+progress::-webkit-progress-value {
     background: linear-gradient(90deg, #00f2ff, #0072ff);
     transition: width 0.3s ease;
-  }
-  
-  progress::-moz-progress-bar {
-    background: linear-gradient(90deg, #00f2ff, #0072ff);;
+}
+
+progress::-moz-progress-bar {
+    background: linear-gradient(90deg, #00f2ff, #0072ff);
+    ;
     transition: width 0.3s ease;
-  }
+}
 
 .audio-setting button {
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: #0072ff;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: #0072ff;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .audio-setting button:hover {
-  background: #00f2ff;
-  box-shadow: 0 0 5px #00f2ff;
+    background: #00f2ff;
+    box-shadow: 0 0 5px #00f2ff;
 }
 
 
@@ -253,7 +282,7 @@ progress {
     transform: scale(1.05);
 }
 
-.impressum-position{
+.impressum-position {
     color: white;
     border-radius: 16px;
     padding: 12px;

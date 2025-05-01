@@ -15,10 +15,18 @@ function startGame() {
     }, 500);
 }
 
+
 function stopGame() {
     startTheGame.classList.remove("disappear")
+    gameOverScreen.style.display = 'none';
     canvas.style.display = 'none';
     startTheGame.style.display = 'flex';
+    clearAllIntervals();
+}
+
+function gameOver() {
+    canvas.style.display = 'none';
+    gameOverScreen.style.display = 'block';
     clearAllIntervals();
 }
 
