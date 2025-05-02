@@ -4,6 +4,7 @@ let gameSettings;
 let impressumSite;
 let world;
 let keyboard = new Keyboard();
+let keyHandled = false;
 let isFullscreen = false;
 let fullscreenImg;
 let audioSettings;

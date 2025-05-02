@@ -44,6 +44,18 @@ class World {
         30, 0
     );
 
+    healthBarEnboss = new StatusBar(100,
+        [
+            'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue100.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue0.png'
+        ],
+        30, 410
+    );
+
     exitGame = new ExitGame();
     throwableObjects = [];
     endbossActivated = false;
@@ -126,7 +138,7 @@ class World {
 
     checkThrowObjects() {
         const now = Date.now();
-        const throwCooldown = 800;
+        const throwCooldown = 400;
 
         if (
             this.keyboard.D &&
@@ -162,8 +174,10 @@ class World {
         this.addToMap(this.bottleBar);
         this.addToMap(this.coinBar);
         this.addToMap(this.healthBar);
+        this.addToMap(this.healthBarEnboss);
         this.addToMap(this.exitGame);
         this.ctx.translate(this.camera_x, 0);
+
 
 
         this.addObjectsToMap(this.throwableObjects);

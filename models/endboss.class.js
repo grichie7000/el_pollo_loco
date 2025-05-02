@@ -53,7 +53,7 @@ class Endboss extends MoveableObject {
                 this.moveLeft();
             }
         }, 1000 / 60);
-
+        
         this.playAnimations()
     }
 

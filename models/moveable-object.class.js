@@ -6,7 +6,7 @@ class MoveableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
-   
+
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -65,7 +65,7 @@ class MoveableObject extends DrawableObject {
     moveRight() {
         this.x += this.speed;
         console.log(this.x);
-        
+
     }
 
     moveLeft() {
@@ -73,7 +73,8 @@ class MoveableObject extends DrawableObject {
     }
 
     isIdle() {
-        if (!this.world.keyboard.UP && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && (this.afkTimeInSeconds < this.timeToBeAfk)) {
+        if (!this.world.keyboard.D && !this.world.keyboard.UP && !this.world.keyboard.RIGHT &&
+            !this.world.keyboard.LEFT && (this.afkTimeInSeconds < this.timeToBeAfk)) {
             setInterval(() => {
                 this.afkTimeInSeconds++;
             }, 1000);
@@ -82,8 +83,11 @@ class MoveableObject extends DrawableObject {
     }
 
     isLongIdle() {
-        if (!this.world.keyboard.UP && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && (this.afkTimeInSeconds > this.timeToBeAfk)) {
+        if (!this.world.keyboard.D && !this.world.keyboard.UP && !this.world.keyboard.RIGHT &&
+            !this.world.keyboard.LEFT && (this.afkTimeInSeconds > this.timeToBeAfk)) {
             return true;
+        }else{
+            this.afkTimeInSeconds = 0 ;
         }
     }
 
