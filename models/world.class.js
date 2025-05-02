@@ -46,7 +46,11 @@ class World {
 
     exitGame = new ExitGame();
     throwableObjects = [];
+    endbossActivated = false;
 
+    get endboss() {
+        return this.level.enemies.find(e => e instanceof Endboss);
+    }
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -68,7 +72,19 @@ class World {
             this.checkCoinCollected();
             this.checkBottleCollected()
             this.checkThrowObjects();
+            this.checkEndbossTrigger();
         }, 200);
+    }
+
+    checkEndbossTrigger() {
+        const triggerX = 1750;
+        if (this.character.x >= triggerX && !this.endbossActivated) {
+            const boss = this.endboss;
+            if (boss) {
+                boss.bossActive = true;
+                this.endbossActivated = true;
+            }
+        }
     }
 
     checkCollision() {
@@ -103,8 +119,6 @@ class World {
                 this.character.bottles++;
                 let percent = (this.character.bottles / this.character.maxBottles) * 100;
                 this.bottleBar.setPercentage(percent);
-                console.log(percent);
-
                 this.level.bottles.splice(index, 1);
             }
         });
@@ -162,11 +176,6 @@ class World {
         requestAnimationFrame(function () {
             self.draw()
         });
-    }
-
-
-    gameOver(){
-
     }
 
     addObjectsToMap(objects) {

@@ -27,7 +27,6 @@ function stopGame() {
 function gameOver() {
     canvas.style.display = 'none';
     gameOverScreen.style.display = 'block';
-    clearAllIntervals();
 }
 
 function showgameSettings() {

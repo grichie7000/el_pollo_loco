@@ -6,8 +6,7 @@ class MoveableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
-
-
+   
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -32,15 +31,13 @@ class MoveableObject extends DrawableObject {
         const offsetX = mo.collisionOffsetX || 0;
         const offsetY = mo.collisionOffsetY || 0;
 
-        return this.x + offsetX < mo.x + mo.width - offsetX &&
-            this.x + this.width - offsetX > mo.x + offsetX &&
+        return this.x + offsetCharX < mo.x + mo.width - offsetX &&
+            this.x + this.width - offsetCharX > mo.x + offsetX &&
             this.y + offsetCharY < mo.y + mo.height - offsetY &&
             this.y + this.height - offsetCharY > mo.y + offsetY;
     }
 
-
     hit() {
-
         this.energy -= 20;
         this.energy = Math.max(0, this.energy);
         this.lastHit = new Date().getTime();
@@ -67,6 +64,8 @@ class MoveableObject extends DrawableObject {
 
     moveRight() {
         this.x += this.speed;
+        console.log(this.x);
+        
     }
 
     moveLeft() {

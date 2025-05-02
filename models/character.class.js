@@ -74,7 +74,7 @@ class Character extends MoveableObject {
     ]
 
     world;
-    gameOverImage; 
+    gameOverImage;
 
     constructor() {
         super().loadImage('./img/2_character_pepe/2_walk/W-21.png')
@@ -129,6 +129,7 @@ class Character extends MoveableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
+                clearAllIntervals();
                 setTimeout(() => {
                     gameOver();
                 }, 1000);
