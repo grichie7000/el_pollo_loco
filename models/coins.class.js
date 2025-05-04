@@ -3,8 +3,8 @@ class Coins extends MoveableObject {
     height = 144;
     width = 144;
     counter = 1;
-    collisionOffsetX = 30;
-    collisionOffsetY = 30;
+    collisionOffsetX = 50;
+    collisionOffsetY = 50;
     IMAGES = [
         'img/8_coin/coin_1.png',
         'img/8_coin/coin_2.png'

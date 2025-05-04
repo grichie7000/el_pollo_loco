@@ -3,8 +3,7 @@ class Character extends MoveableObject {
     height = 300;
     width = 120;
     hitboxOffsetX = 20;
-    hitboxOffsetY = 80;
-    y = 0;
+    hitboxOffsetY = 150;
     speed = 10;
     afkTimeInSeconds = 0;
     timeToBeAfk = 200;

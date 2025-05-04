@@ -20,7 +20,7 @@ class MoveableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return this.y < 350;
         } else {
-            return this.y < 120;
+            return this.y < 130;
         }
     }
 
@@ -28,19 +28,22 @@ class MoveableObject extends DrawableObject {
         const offsetCharX = this instanceof Character ? this.hitboxOffsetX || 0 : this.collisionOffsetX || 0;
         const offsetCharY = this instanceof Character ? this.hitboxOffsetY || 0 : this.collisionOffsetY || 0;
 
-        const offsetX = mo.collisionOffsetX || 0;
-        const offsetY = mo.collisionOffsetY || 0;
+        const offsetX = mo instanceof Character ? mo.hitboxOffsetX || 0 : mo.collisionOffsetX || 0;
+        const offsetY = mo instanceof Character ? mo.hitboxOffsetY || 0 : mo.collisionOffsetY || 0;
 
         return this.x + offsetCharX < mo.x + mo.width - offsetX &&
             this.x + this.width - offsetCharX > mo.x + offsetX &&
-            this.y + offsetCharY < mo.y + mo.height - offsetY &&
-            this.y + this.height - offsetCharY > mo.y + offsetY;
+            this.y + offsetCharY < mo.y + mo.height &&
+            this.y + this.height > mo.y + offsetY;
     }
 
     hit() {
-        this.energy -= 20;
-        this.energy = Math.max(0, this.energy);
-        this.lastHit = new Date().getTime();
+        this.energy -= 5;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
     }
 
     isHurt() {
@@ -55,6 +58,25 @@ class MoveableObject extends DrawableObject {
         return this.energy == 0;
     }
 
+    hitEnemies() {
+        this.energy -= 20;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
+    }
+
+    isHurtEnemies() {
+        const now = new Date().getTime();
+        let timepassed = now - this.lastHit;
+        timepassed = timepassed / 1000;
+
+        return timepassed < 1;
+    }
+
+    isDeadEnemies() {
+        return this.energy == 0;
+    }
+
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -64,13 +86,13 @@ class MoveableObject extends DrawableObject {
 
     moveRight() {
         this.x += this.speed;
-        console.log(this.x);
-
     }
 
     moveLeft() {
         this.x -= this.speed;
     }
+
+
 
     isIdle() {
         if (!this.world.keyboard.D && !this.world.keyboard.UP && !this.world.keyboard.RIGHT &&
@@ -86,8 +108,8 @@ class MoveableObject extends DrawableObject {
         if (!this.world.keyboard.D && !this.world.keyboard.UP && !this.world.keyboard.RIGHT &&
             !this.world.keyboard.LEFT && (this.afkTimeInSeconds > this.timeToBeAfk)) {
             return true;
-        }else{
-            this.afkTimeInSeconds = 0 ;
+        } else {
+            this.afkTimeInSeconds = 0;
         }
     }
 

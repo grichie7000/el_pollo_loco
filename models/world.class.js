@@ -59,7 +59,7 @@ class World {
     exitGame = new ExitGame();
     throwableObjects = [];
     endbossActivated = false;
-
+    healthBarTriggerd = false;
     get endboss() {
         return this.level.enemies.find(e => e instanceof Endboss);
     }
@@ -95,24 +95,32 @@ class World {
             if (boss) {
                 boss.bossActive = true;
                 this.endbossActivated = true;
+                if (!this.healthBarTriggerd) {
+                    this.healthBarEnboss.setPercentage(80);
+                    this.healthBarTriggerd = true;
+                }
             }
         }
     }
 
     checkCollision() {
-
-        let currentTime = Date.now();
-        let cooldownTime = 1000;
-
-        if (currentTime - this.healthCooldown >= cooldownTime) {
-            this.level.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
+        this.level.enemies.forEach((enemy, index) => {
+            if (this.character.isColliding(enemy)) {
+                console.log(this.character.y);
+                
+                if (this.character.y > 80) {
                     this.character.hit();
                     this.healthBar.setPercentage(this.character.energy);
-                    this.healthCooldown = currentTime;
+                } else {
+                    this.level.enemies[index].hitEnemies()
+                    this.level.enemies[index].speed = 0;
+                    setTimeout(() => {
+                        this.level.enemies.splice(index, 1);
+                    }, 500);
+                    
                 }
-            });
-        }
+            }
+        });
     }
 
     checkCoinCollected() {
