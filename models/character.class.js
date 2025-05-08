@@ -2,7 +2,7 @@ class Character extends MoveableObject {
 
     height = 300;
     width = 120;
-    hitboxOffsetX = 20;
+    hitboxOffsetX = 10;
     hitboxOffsetY = 150;
     speed = 10;
     afkTimeInSeconds = 0;
@@ -20,8 +20,8 @@ class Character extends MoveableObject {
     ];
 
     IMAGES_JUMPING = [
-        './img/2_character_pepe/3_jump/J-31.png',
-        './img/2_character_pepe/3_jump/J-32.png',
+        './img/2_character_pepe/3_jump/J-33.png',
+        './img/2_character_pepe/3_jump/J-33.png',
         './img/2_character_pepe/3_jump/J-33.png',
         './img/2_character_pepe/3_jump/J-34.png',
         './img/2_character_pepe/3_jump/J-35.png',
@@ -80,6 +80,7 @@ class Character extends MoveableObject {
         this.coins = 1;
         this.bottles = 1;
         this.maxBottles = 5;
+        this.isJumping = false;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DEAD);
@@ -148,14 +149,14 @@ class Character extends MoveableObject {
         }, 120);
     }
 
-    jump() {
-        this.speedY = 30;
-    }
-
     playWalkingSound() {
         if (!this.isAboveGround()) {
             this.walkSound.playSound();
         }
+    }
+
+    jump() {
+        this.speedY = 30;
     }
 
 }

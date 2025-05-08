@@ -63,6 +63,7 @@ class World {
     get endboss() {
         return this.level.enemies.find(e => e instanceof Endboss);
     }
+    pepeInTheAir = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -80,12 +81,20 @@ class World {
 
     run() {
         setInterval(() => {
+            this.checkInTheAir()
             this.checkCollision();
             this.checkCoinCollected();
             this.checkBottleCollected()
             this.checkThrowObjects();
             this.checkEndbossTrigger();
-        }, 200);
+        }, 100);
+    }
+
+    checkInTheAir() {
+        if (this.character.y < 0) {
+            console.log('luft');
+            this.pepeInTheAir = true;
+        }
     }
 
     checkEndbossTrigger() {
@@ -104,23 +113,29 @@ class World {
     }
 
     checkCollision() {
-        this.level.enemies.forEach((enemy, index) => {
-            if (this.character.isColliding(enemy)) {
-                console.log(this.character.y);
-                
-                if (this.character.y > 80) {
-                    this.character.hit();
-                    this.healthBar.setPercentage(this.character.energy);
-                } else {
-                    this.level.enemies[index].hitEnemies()
-                    this.level.enemies[index].speed = 0;
-                    setTimeout(() => {
-                        this.level.enemies.splice(index, 1);
-                    }, 500);
-                    
+        if (!this.endbossActivated) {
+            this.level.enemies.forEach((enemy, index) => {
+                if (this.character.isColliding(enemy)) {
+                    if (this.character.y > 100 && !this.pepeInTheAir && !this.level.enemies[index].isDeadEnemies()) {
+                        this.character.hit();
+                        this.healthBar.setPercentage(this.character.energy);
+                    } else if (this.pepeInTheAir && !this.endbossActivated) {
+                        this.level.enemies[index].hitEnemies()
+                        this.level.enemies[index].speed = 0;
+                        this.pepeInTheAir = false;
+                        setTimeout(() => {
+                            this.level.enemies.splice(index, 1);
+                        }, 500);
+
+                    }
                 }
-            }
-        });
+            });
+
+        } else if(this.character.isColliding(this.level.enemies[this.level.enemies.length - 1])){
+            this.character.hit();
+            this.healthBar.setPercentage(this.character.energy);
+        }
+
     }
 
     checkCoinCollected() {

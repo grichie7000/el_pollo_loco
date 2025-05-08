@@ -60,17 +60,12 @@ class MoveableObject extends DrawableObject {
 
     hitEnemies() {
         this.energy -= 20;
+
         if (this.energy < 0) {
             this.energy = 0;
+        }else {
+            this.lastHit = new Date().getTime();
         }
-    }
-
-    isHurtEnemies() {
-        const now = new Date().getTime();
-        let timepassed = now - this.lastHit;
-        timepassed = timepassed / 1000;
-
-        return timepassed < 1;
     }
 
     isDeadEnemies() {
@@ -91,8 +86,6 @@ class MoveableObject extends DrawableObject {
     moveLeft() {
         this.x -= this.speed;
     }
-
-
 
     isIdle() {
         if (!this.world.keyboard.D && !this.world.keyboard.UP && !this.world.keyboard.RIGHT &&
