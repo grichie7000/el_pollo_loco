@@ -294,7 +294,7 @@ progress::-moz-progress-bar {
     transform: scale(1.05);
 }
 
-.impressum-position {
+.imprint {
     color: white;
     border-radius: 16px;
     padding: 12px;
@@ -306,6 +306,25 @@ progress::-moz-progress-bar {
     font-size: 18px;
     font-family: 'Courier New', Courier, monospace;
 }
+
+.imprint {
+  color: white;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.imprint a {
+  color: white;
+  text-decoration: underline;
+}
+
+.imprint ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 1.5em;
+}
+
 
 @media only screen and (max-width: 720px) {
     canvas {

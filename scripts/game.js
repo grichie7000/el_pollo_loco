@@ -83,6 +83,23 @@ window.addEventListener('keyup', (event) => {
     }
 });
 
+function startBossFight() {
+    if (!checkMuteButton()) {
+        bgMusic.pause();
+        bossMusic.currentTime = 0;
+        bossMusic.play();
+    }
+
+}
+
+function endBossFight() {
+    if (!checkMuteButton()) {
+        bossMusic.pause();
+        bgMusic.play();
+    }
+
+}
+
 function getElements() {
     canvas = document.getElementById('canvas');
     startTheGame = document.getElementById('start-screen');
@@ -90,8 +107,9 @@ function getElements() {
     impressumSite = document.getElementById('impressum-site');
     fullscreenImg = document.getElementById('fullscreen-btn');
     bgMusic = document.getElementById('bg-music');
+    bossMusic = document.getElementById('boss-music');
     volumeBtn = document.getElementById('volume-btn');
     audioSettings = document.getElementById('audio-settings');
     keyboardLayout = document.getElementById('keyboard-layout');
-    gameOverScreen  = document.getElementById('game-over');
+    gameOverScreen = document.getElementById('game-over');
 }

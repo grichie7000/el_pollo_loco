@@ -21,7 +21,7 @@ function stopGame() {
     gameOverScreen.style.display = 'none';
     canvas.style.display = 'none';
     startTheGame.style.display = 'flex';
-    
+
     const winScreen = document.querySelector('.winner-screen');
     if (winScreen) {
         winScreen.remove();
@@ -33,14 +33,16 @@ function stopGame() {
 function showWinnerScreen() {
     let winScreen = document.createElement('img');
     winScreen.src = 'img/You won, you lost/You Win A.png';
+
     winScreen.classList.add('winner-screen');
 
     document.body.appendChild(winScreen);
-
+    endBossFight()
     clearAllIntervals();
 }
 
 function gameOver() {
+    endBossFight()
     canvas.style.display = 'none';
     gameOverScreen.style.display = 'block';
 }
@@ -64,6 +66,14 @@ function backToMenu() {
     showKeyboard();
 }
 
+function checkMuteButton() {
+    const checkVolumeBtn = document.getElementById('volume-btn');
+    const iconPath = new URL(checkVolumeBtn.src).pathname;
+
+    if (iconPath === '/icons/volume-mute.png') {
+        return true
+    }
+}
 
 function toggleMusic() {
     if (!musicIsPlaying) {

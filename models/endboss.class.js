@@ -83,7 +83,7 @@ class Endboss extends MoveableObject {
             if (this.bossActive && this.isWalking) {
                 this.moveLeft();
             } else if (this.bossActive && this.isAttacking) {
-                this.moveLeft(); 
+                this.moveLeft();
             }
         }, 1000 / 60);
 
@@ -121,14 +121,14 @@ class Endboss extends MoveableObject {
             }
 
             phase = (phase + 1) % 3;
-        }, 4000); 
+        }, 4000);
     }
 
     resetPhases() {
         this.isWalking = false;
         this.isInAlert = false;
         this.isAttacking = false;
-        this.speed = 0.5; 
+        this.speed = 0.5;
     }
 
     walk() {
@@ -141,11 +141,10 @@ class Endboss extends MoveableObject {
 
     attack() {
         this.isAttacking = true;
-        this.speed = 2; 
+        this.speed = 2;
 
-        if (this.isAboveGround()) return; 
-
-        this.speedY = 40;         
-        this.applyGravity();      
+        if (this.isAboveGround()) return;
+        this.speedY = 40;
+        this.applyGravity();
     }
 }

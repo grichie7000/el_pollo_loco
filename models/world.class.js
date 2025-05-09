@@ -8,7 +8,9 @@ class World {
     camera_x = 0;
     healthCooldown = 0;
     lastBottleThrow = 0;
-
+    fillBottle = new Sounds('audio/fill_bottle.mp3', 0.5)
+    coinCollected = new Sounds('audio/kaching.mp3', 0.5)
+    chickenHitted = new Sounds('audio/boing.mp3', 0.5)
     healthBar = new StatusBar(100,
         [
             'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
@@ -99,7 +101,7 @@ class World {
     checkBottleHitsEnemies() {
         this.throwableObjects.forEach((bottle) => {
             if (bottle.hasHit) return;
-            
+
             this.level.enemies.forEach((enemy, enemyIndex) => {
                 if (bottle.isColliding(enemy)) {
                     enemy.hitEnemies();
@@ -115,12 +117,11 @@ class World {
                 }
             });
 
-            // Prüfe Endboss
             const boss = this.endboss;
             if (boss && boss.bossActive && bottle.isColliding(boss)) {
                 boss.hit();
                 this.healthBarEnboss.setPercentage(boss.energy);
-                bottle.handleHit(); 
+                bottle.handleHit();
             }
         });
     }
@@ -137,6 +138,7 @@ class World {
             const boss = this.endboss;
             if (boss) {
                 boss.bossActive = true;
+                startBossFight();
                 this.endbossActivated = true;
                 if (!this.healthBarTriggerd) {
                     this.healthBarEnboss.setPercentage(80);
@@ -158,6 +160,7 @@ class World {
                         this.level.enemies[index].hitEnemies()
                         this.level.enemies[index].speed = 0;
                         this.pepeInTheAir = false;
+                        this.chickenHitted.playSound();
                         setTimeout(() => {
                             this.level.enemies.splice(index, 1);
                         }, 500);
@@ -176,6 +179,7 @@ class World {
     checkCoinCollected() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
+                this.coinCollected.playSound();
                 this.character.coins += 20;
                 this.coinBar.setPercentage(this.character.coins);
                 this.level.coins.splice(index, 1);
@@ -187,6 +191,7 @@ class World {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle) && this.character.bottles < this.character.maxBottles) {
                 this.character.bottles++;
+                this.fillBottle.playSound();
                 let percent = (this.character.bottles / this.character.maxBottles) * 100;
                 this.bottleBar.setPercentage(percent);
                 this.level.bottles.splice(index, 1);

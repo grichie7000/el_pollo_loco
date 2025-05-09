@@ -9,6 +9,7 @@ class Character extends MoveableObject {
     timeToBeAfk = 200;
     jumpSound = new Sounds('audio/jump.mp3', 0.1)
     walkSound = new Sounds('audio/walking.mp3', 0.1)
+    hurtSound = new Sounds('audio/ough.mp3', 0.5)
 
     IMAGES_WALKING = [
         './img/2_character_pepe/2_walk/W-21.png',
@@ -135,6 +136,7 @@ class Character extends MoveableObject {
                 }, 1000);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT)
+                this.playHurtSound();
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING)
             } else if (this.isIdle()) {
@@ -154,6 +156,14 @@ class Character extends MoveableObject {
             this.walkSound.playSound();
         }
     }
+
+playHurtSound() {
+    const now = new Date().getTime();
+    if (!this.lastHurtSoundTime || now - this.lastHurtSoundTime > 500) {
+        this.hurtSound.playSound();
+        this.lastHurtSoundTime = now;
+    }
+}
 
     jump() {
         this.speedY = 30;

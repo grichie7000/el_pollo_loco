@@ -2,6 +2,7 @@ class ThrowableObject extends MoveableObject {
 
     collisionOffsetX = 30;
     collisionOffsetY = -10;
+    glassBreak = new Sounds('audio/glass-break.mp3', 0.5)
 
 
     constructor(x, y) {
@@ -41,8 +42,7 @@ class ThrowableObject extends MoveableObject {
 
     playSplashAnimation() {
         this.currentImage = 0;
-
-
+        this.glassBreak.playSound();
         let splashInterval = setInterval(() => {
             this.playAnimation(this.splashImages);
 
@@ -61,9 +61,9 @@ class ThrowableObject extends MoveableObject {
         if (!this.hasHit) {
             this.hasHit = true;
 
-            clearInterval(this.throwInterval); 
-            this.speedY = 0;                    
-            this.playSplashAnimation();        
+            clearInterval(this.throwInterval);
+            this.speedY = 0;
+            this.playSplashAnimation();
         }
     }
 }
