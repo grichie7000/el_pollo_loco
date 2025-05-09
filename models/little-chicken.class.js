@@ -35,7 +35,6 @@ class LittleChicken extends MoveableObject {
         this.playAnimations();
     }
 
-
     playAnimations() {
         setInterval(() => {
             if (this.isDeadEnemies()) {

@@ -8,9 +8,18 @@ class World {
     camera_x = 0;
     healthCooldown = 0;
     lastBottleThrow = 0;
+    exitGame = new ExitGame();
+    throwableObjects = [];
+    endbossActivated = false;
+    healthBarTriggerd = false;
+    get endboss() {
+        return this.level.enemies.find(e => e instanceof Endboss);
+    }
+    pepeInTheAir = false;
     fillBottle = new Sounds('audio/fill_bottle.mp3', 0.5)
     coinCollected = new Sounds('audio/kaching.mp3', 0.5)
     chickenHitted = new Sounds('audio/boing.mp3', 0.5)
+
     healthBar = new StatusBar(100,
         [
             'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
@@ -59,15 +68,6 @@ class World {
         30, 410
     );
 
-    exitGame = new ExitGame();
-    throwableObjects = [];
-    endbossActivated = false;
-    healthBarTriggerd = false;
-    get endboss() {
-        return this.level.enemies.find(e => e instanceof Endboss);
-    }
-    pepeInTheAir = false;
-
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -98,38 +98,55 @@ class World {
         }, 100);
     }
 
-    checkBottleHitsEnemies() {
-        this.throwableObjects.forEach((bottle) => {
-            if (bottle.hasHit) return;
 
-            this.level.enemies.forEach((enemy, enemyIndex) => {
-                if (bottle.isColliding(enemy)) {
-                    enemy.hitEnemies();
-
-                    if (enemy.isDeadEnemies()) {
-                        this.level.enemies[enemyIndex].speed = 0;
-                        setTimeout(() => {
-                            this.level.enemies.splice(enemyIndex, 1);
-                        }, 500);
-                    }
-
-                    bottle.handleHit();
-                }
-            });
-
-            const boss = this.endboss;
-            if (boss && boss.bossActive && bottle.isColliding(boss)) {
-                boss.hit();
-                this.healthBarEnboss.setPercentage(boss.energy);
-                bottle.handleHit();
-            }
-        });
-    }
 
     checkInTheAir() {
         if (this.character.y < 0) {
             this.pepeInTheAir = true;
         }
+    }
+
+    checkBottleHitsEnemies() {
+        this.throwableObjects.forEach((bottle) => {
+            if (bottle.hasHit) return;
+
+            this.checkBottleCollisionsWithEnemies(bottle);
+            this.checkBottleCollisionsWithBoss(bottle);
+        });
+    }
+
+    checkBottleCollisionsWithEnemies(bottle) {
+        this.level.enemies.forEach((enemy, enemyIndex) => {
+            if (bottle.isColliding(enemy)) {
+                this.handleEnemyHit(bottle, enemy, enemyIndex);
+            }
+        });
+    }
+
+    handleEnemyHit(bottle, enemy, enemyIndex) {
+        enemy.hitEnemies();
+
+        if (enemy.isDeadEnemies()) {
+            this.level.enemies[enemyIndex].speed = 0;
+            setTimeout(() => {
+                this.level.enemies.splice(enemyIndex, 1);
+            }, 500);
+        }
+
+        bottle.handleHit();
+    }
+
+    checkBottleCollisionsWithBoss(bottle) {
+        const boss = this.endboss;
+        if (boss && boss.bossActive && bottle.isColliding(boss)) {
+            this.handleBossHit(bottle, boss);
+        }
+    }
+
+    handleBossHit(bottle, boss) {
+        boss.hit();
+        this.healthBarEnboss.setPercentage(boss.energy);
+        bottle.handleHit();
     }
 
     checkEndbossTrigger() {
@@ -150,30 +167,57 @@ class World {
 
     checkCollision() {
         if (!this.endbossActivated) {
-            this.level.enemies.forEach((enemy, index) => {
-                if (this.character.isColliding(enemy)) {
-                    if (this.character.y > 100 && !this.pepeInTheAir && !this.level.enemies[index].isDeadEnemies()) {
-                        this.character.hit();
-                        this.healthBar.setPercentage(this.character.energy);
-                    } else if (this.pepeInTheAir && !this.endbossActivated) {
-
-                        this.level.enemies[index].hitEnemies()
-                        this.level.enemies[index].speed = 0;
-                        this.pepeInTheAir = false;
-                        this.chickenHitted.playSound();
-                        setTimeout(() => {
-                            this.level.enemies.splice(index, 1);
-                        }, 500);
-
-                    }
-                }
-            });
-
-        } else if (this.character.isColliding(this.level.enemies[this.level.enemies.length - 1])) {
-            this.character.hit();
-            this.healthBar.setPercentage(this.character.energy);
+            this.checkCollisionsWithEnemies();
+        } else {
+            this.checkCollisionsWithEndboss();
         }
+    }
 
+    checkCollisionsWithEnemies() {
+        this.level.enemies.forEach((enemy, index) => {
+            if (this.character.isColliding(enemy)) {
+                this.handleEnemyCollision(enemy, index);
+            }
+        });
+    }
+
+    /**
+ * Handles the collision between the character and an enemy.
+ * Depending on the conditions, it either processes a regular character hit or
+ * handles the case where the character is in the air and hits an enemy.
+ * 
+ * @param {Object} enemy - The enemy that the character is colliding with.
+ * @param {number} index - The index of the enemy in the `this.level.enemies` array.
+ */
+    handleEnemyCollision(enemy, index) {
+        if (this.character.y > 100 && !this.pepeInTheAir && !enemy.isDeadEnemies()) {
+            this.handleCharacterHit();
+        } else if (this.pepeInTheAir && !this.endbossActivated) {
+            this.handleCharacterInAirHit(enemy, index);
+        }
+    }
+
+    handleCharacterHit() {
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.energy);
+    }
+
+    handleCharacterInAirHit(enemy, index) {
+        enemy.hitEnemies();
+        enemy.speed = 0;
+        this.pepeInTheAir = false;
+        this.chickenHitted.playSound();
+
+        setTimeout(() => {
+            this.level.enemies.splice(index, 1);
+        }, 500);
+    }
+
+    checkCollisionsWithEndboss() {
+        const endboss = this.level.enemies[this.level.enemies.length - 1];
+        if (this.character.isColliding(endboss)) {
+            this.handleCharacterHit();
+        }
     }
 
     checkCoinCollected() {
@@ -220,19 +264,39 @@ class World {
     }
 
     draw() {
+        this.clearCanvas();
+        this.handleCameraTranslation();
+        this.addBackgroundObjectsToMap();
+        this.addCharacterToMap();
+        this.addCloudsAndEnemiesToMap();
+        this.addFixedObjectsToMap();
+        this.addThrowableObjectsAndItemsToMap();
+        this.resetCameraTranslation();
+        this.requestNextFrame();
+    }
 
+    clearCanvas() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
 
+    handleCameraTranslation() {
         this.ctx.translate(this.camera_x, 0);
+    }
+
+    addBackgroundObjectsToMap() {
         this.addObjectsToMap(this.level.backgroundObjects);
+    }
 
-
+    addCharacterToMap() {
         this.addToMap(this.character);
+    }
 
+    addCloudsAndEnemiesToMap() {
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
+    }
 
-        //---space for fixed Objects---
+    addFixedObjectsToMap() {
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.bottleBar);
         this.addToMap(this.coinBar);
@@ -240,27 +304,47 @@ class World {
         this.addToMap(this.healthBarEnboss);
         this.addToMap(this.exitGame);
         this.ctx.translate(this.camera_x, 0);
+    }
 
-
-
+    addThrowableObjectsAndItemsToMap() {
         this.addObjectsToMap(this.throwableObjects);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
+    }
 
+    resetCameraTranslation() {
         this.ctx.translate(-this.camera_x, 0);
+    }
 
+    requestNextFrame() {
         let self = this;
         requestAnimationFrame(function () {
-            self.draw()
+            self.draw();
         });
     }
 
+    /**
+ * Adds multiple objects to the map by drawing them on the canvas.
+ * Iterates over each object in the `objects` array and calls `addToMap()` for each.
+ * 
+ * @param {Array} objects - An array of objects to be added to the map.
+ * Each object should have a `draw` method and may have a `flipImage` property.
+ */
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o)
         })
     }
 
+    /**
+ * Adds a single object to the map by drawing it on the canvas and drawing its frame.
+ * If the object is facing the opposite direction, it flips the image horizontally.
+ * 
+ * @param {Object} mo - The object to be added to the map. The object should have:
+ *   - `otherDirection` (boolean): A flag indicating if the object should be flipped horizontally.
+ *   - `draw` (function): A method to draw the object on the canvas.
+ *   - `drawFrame` (function): A method to draw the object's collision frame (if applicable).
+ */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo)
@@ -275,6 +359,12 @@ class World {
         }
     }
 
+    /**
+ * Flips an object horizontally on the canvas by saving the current canvas state,
+ * translating the context, and scaling the image negatively.
+ * 
+ * @param {Object} mo - The object to be flipped. The object should have a `width` and `x` property.
+ */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0)
@@ -282,6 +372,11 @@ class World {
         mo.x = mo.x * -1;
     }
 
+    /**
+ * Restores the canvas state after flipping an object and flips the object's x-coordinate back.
+ * 
+ * @param {Object} mo - The object to be flipped back. The object should have an `x` property.
+ */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();

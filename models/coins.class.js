@@ -5,6 +5,7 @@ class Coins extends MoveableObject {
     counter = 1;
     collisionOffsetX = 50;
     collisionOffsetY = 50;
+    
     IMAGES = [
         'img/8_coin/coin_1.png',
         'img/8_coin/coin_2.png'

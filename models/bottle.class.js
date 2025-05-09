@@ -10,6 +10,12 @@ class Bottles extends MoveableObject {
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ]
 
+    /**
+ * Constructor for the object that loads an image and sets its position.
+ * It also initializes the images and starts animation.
+ *
+ * @param {number} offset - The horizontal offset to adjust the X position.
+ */
     constructor(offset) {
         super().loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.loadImages(this.IMAGES)

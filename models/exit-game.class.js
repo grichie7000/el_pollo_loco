@@ -22,6 +22,11 @@ class ExitGame extends DrawableObject {
         this.img = this.imageCache[path]
     }
 
+    /**
+ * Handles mouse movement events to change the cursor style when hovering over the exit button.
+ * 
+ * @param {MouseEvent} event - The mouse move event.
+ */
     handleMouseMove(event) {
         const mouseX = event.offsetX;
         const mouseY = event.offsetY;
@@ -33,14 +38,33 @@ class ExitGame extends DrawableObject {
         }
     }
 
+    /**
+ * Checks if the mouse click is inside the bounds of the exit button.
+ *
+ * @param {number} mouseX - The X-coordinate of the mouse.
+ * @param {number} mouseY - The Y-coordinate of the mouse.
+ * @returns {boolean} True if the click is within the bounds of the exit button, otherwise false.
+ */
     isClicked(mouseX, mouseY) {
         return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
     }
 
+    /**
+ * Checks if the mouse coordinates are within the bounds of the exit button.
+ *
+ * @param {number} mouseX - The X-coordinate of the mouse.
+ * @param {number} mouseY - The Y-coordinate of the mouse.
+ * @returns {boolean} True if the mouse is over the exit button, otherwise false.
+ */
     isMouseOver(mouseX, mouseY) {
         return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
     }
 
+    /**
+ * Checks if the exit button is clicked based on the mouse coordinates.
+ * 
+ * @param {MouseEvent} event - The mouse click event.
+ */
     handleClick(event) {
         const mouseX = event.offsetX;
         const mouseY = event.offsetY;

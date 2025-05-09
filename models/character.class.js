@@ -10,6 +10,8 @@ class Character extends MoveableObject {
     jumpSound = new Sounds('audio/jump.mp3', 0.1)
     walkSound = new Sounds('audio/walking.mp3', 0.1)
     hurtSound = new Sounds('audio/ough.mp3', 0.5)
+    world;
+    gameOverImage;
 
     IMAGES_WALKING = [
         './img/2_character_pepe/2_walk/W-21.png',
@@ -73,9 +75,6 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ]
 
-    world;
-    gameOverImage;
-
     constructor() {
         super().loadImage('./img/2_character_pepe/2_walk/W-21.png')
         this.coins = 1;
@@ -93,40 +92,52 @@ class Character extends MoveableObject {
     }
 
     animate() {
-
         setInterval(() => {
-
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.otherDirection = false;
-                this.afkTimeInSeconds = 0;
-                this.playWalkingSound();
-            }
-
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-                this.afkTimeInSeconds = 0;
-                this.playWalkingSound();
-            }
-
-            if (this.world.keyboard.UP && !this.isAboveGround()) {
-                this.jump();
-                this.afkTimeInSeconds = 0;
-                this.jumpSound.playSound();
-            }
-
-            this.world.camera_x = -this.x + 100;
-
+            this.handleMovement();
+            this.handleJump();
+            this.updateCameraPosition();
         }, 1000 / 60);
 
         this.playAnimations();
-
     }
 
+    handleMovement() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.resetAfkTime();
+            this.playWalkingSound();
+        }
+
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+            this.resetAfkTime();
+            this.playWalkingSound();
+        }
+    }
+
+    handleJump() {
+        if (this.world.keyboard.UP && !this.isAboveGround()) {
+            this.jump();
+            this.resetAfkTime();
+            this.jumpSound.playSound();
+        }
+    }
+
+    updateCameraPosition() {
+        this.world.camera_x = -this.x + 100;
+    }
+
+    resetAfkTime() {
+        this.afkTimeInSeconds = 0;
+    }
+
+    playWalkingSound() {
+        this.walkingSound.play();
+    }
 
     playAnimations() {
-
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
@@ -157,13 +168,13 @@ class Character extends MoveableObject {
         }
     }
 
-playHurtSound() {
-    const now = new Date().getTime();
-    if (!this.lastHurtSoundTime || now - this.lastHurtSoundTime > 500) {
-        this.hurtSound.playSound();
-        this.lastHurtSoundTime = now;
+    playHurtSound() {
+        const now = new Date().getTime();
+        if (!this.lastHurtSoundTime || now - this.lastHurtSoundTime > 500) {
+            this.hurtSound.playSound();
+            this.lastHurtSoundTime = now;
+        }
     }
-}
 
     jump() {
         this.speedY = 30;

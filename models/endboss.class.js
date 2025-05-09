@@ -30,14 +30,10 @@ class Endboss extends MoveableObject {
     ];
 
     IMAGES_ATTACK = [
-        // 'img/4_enemie_boss_chicken/3_attack/G13.png',
-        // 'img/4_enemie_boss_chicken/3_attack/G14.png',
         'img/4_enemie_boss_chicken/3_attack/G15.png',
         'img/4_enemie_boss_chicken/3_attack/G16.png',
         'img/4_enemie_boss_chicken/3_attack/G17.png',
         'img/4_enemie_boss_chicken/3_attack/G18.png',
-        // 'img/4_enemie_boss_chicken/3_attack/G19.png',
-        // 'img/4_enemie_boss_chicken/3_attack/G20.png',
     ];
 
     IMAGES_HURT = [

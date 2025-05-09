@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "docs": "jsdoc **/*.js --destination docs"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.4"
+  }
+}
+

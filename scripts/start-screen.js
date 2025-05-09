@@ -1,6 +1,4 @@
 
-
-
 function initStartScreen() {
     document.getElementById('bg-music-volume').value = progressValue;
 }
@@ -14,7 +12,6 @@ function startGame() {
         canvas.style.display = 'block';
     }, 500);
 }
-
 
 function stopGame() {
     startTheGame.classList.remove("disappear")
@@ -96,7 +93,6 @@ function pauseMusic() {
     musicIsPlaying = false;
 }
 
-
 function toggleFullscreen() {
     if (!isFullscreen) {
         startFullscreen();
@@ -156,7 +152,6 @@ function showAudio() {
     document.getElementById('display-audio-settings').style.display = 'flex'
     document.getElementById('display-keyboard-layout').style.display = 'none'
 }
-
 
 function changeVolume(button, delta) {
     const progress = button.parentElement.querySelector('progress');
