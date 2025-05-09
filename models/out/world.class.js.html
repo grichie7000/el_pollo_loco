@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: world.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: world.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class World {
+
+    character = new Character();
+    level = level1;
+    canvas;
+    ctx;
+    keyboard;
+    camera_x = 0;
+    healthCooldown = 0;
+    lastBottleThrow = 0;
+    exitGame = new ExitGame();
+    throwableObjects = [];
+    endbossActivated = false;
+    healthBarTriggerd = false;
+    get endboss() {
+        return this.level.enemies.find(e => e instanceof Endboss);
+    }
+    pepeInTheAir = false;
+    fillBottle = new Sounds('audio/fill_bottle.mp3', 0.5)
+    coinCollected = new Sounds('audio/kaching.mp3', 0.5)
+    chickenHitted = new Sounds('audio/boing.mp3', 0.5)
+
+    healthBar = new StatusBar(100,
+        [
+            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
+        ],
+        30, 80
+    );
+
+    coinBar = new StatusBar(0,
+        [
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png',
+        ],
+        30, 40
+    );
+
+    bottleBar = new StatusBar(0,
+        [
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
+        ],
+        30, 0
+    );
+
+    healthBarEnboss = new StatusBar(100,
+        [
+            'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue100.png',
+            'img/7_statusbars/2_statusbar_endboss/blue/blue0.png'
+        ],
+        30, 410
+    );
+
+    constructor(canvas, keyboard) {
+        this.ctx = canvas.getContext('2d');
+        this.canvas = canvas;
+        this.keyboard = keyboard;
+        this.character.bottles = 0;
+        this.draw();
+        this.setWorld();
+        this.run();
+    }
+
+    setWorld() {
+        this.character.world = this;
+        const boss = this.endboss;
+        if (boss) {
+            boss.world = this;
+        }
+    }
+
+    run() {
+        setInterval(() => {
+            this.checkInTheAir()
+            this.checkCollision();
+            this.checkCoinCollected();
+            this.checkBottleCollected()
+            this.checkThrowObjects();
+            this.checkEndbossTrigger();
+            this.checkBottleHitsEnemies();
+        }, 100);
+    }
+
+
+
+    checkInTheAir() {
+        if (this.character.y &lt; 0) {
+            this.pepeInTheAir = true;
+        }
+    }
+
+    checkBottleHitsEnemies() {
+        this.throwableObjects.forEach((bottle) => {
+            if (bottle.hasHit) return;
+
+            this.checkBottleCollisionsWithEnemies(bottle);
+            this.checkBottleCollisionsWithBoss(bottle);
+        });
+    }
+
+    checkBottleCollisionsWithEnemies(bottle) {
+        this.level.enemies.forEach((enemy, enemyIndex) => {
+            if (bottle.isColliding(enemy)) {
+                this.handleEnemyHit(bottle, enemy, enemyIndex);
+            }
+        });
+    }
+
+    handleEnemyHit(bottle, enemy, enemyIndex) {
+        enemy.hitEnemies();
+
+        if (enemy.isDeadEnemies()) {
+            this.level.enemies[enemyIndex].speed = 0;
+            setTimeout(() => {
+                this.level.enemies.splice(enemyIndex, 1);
+            }, 500);
+        }
+
+        bottle.handleHit();
+    }
+
+    checkBottleCollisionsWithBoss(bottle) {
+        const boss = this.endboss;
+        if (boss &amp;&amp; boss.bossActive &amp;&amp; bottle.isColliding(boss)) {
+            this.handleBossHit(bottle, boss);
+        }
+    }
+
+    handleBossHit(bottle, boss) {
+        boss.hit();
+        this.healthBarEnboss.setPercentage(boss.energy);
+        bottle.handleHit();
+    }
+
+    checkEndbossTrigger() {
+        const triggerX = 1750;
+        if (this.character.x >= triggerX &amp;&amp; !this.endbossActivated) {
+            const boss = this.endboss;
+            if (boss) {
+                boss.bossActive = true;
+                startBossFight();
+                this.endbossActivated = true;
+                if (!this.healthBarTriggerd) {
+                    this.healthBarEnboss.setPercentage(80);
+                    this.healthBarTriggerd = true;
+                }
+            }
+        }
+    }
+
+    checkCollision() {
+        if (!this.endbossActivated) {
+            this.checkCollisionsWithEnemies();
+        } else {
+            this.checkCollisionsWithEndboss();
+        }
+    }
+
+    checkCollisionsWithEnemies() {
+        this.level.enemies.forEach((enemy, index) => {
+            if (this.character.isColliding(enemy)) {
+                this.handleEnemyCollision(enemy, index);
+            }
+        });
+    }
+
+    /**
+ * Handles the collision between the character and an enemy.
+ * Depending on the conditions, it either processes a regular character hit or
+ * handles the case where the character is in the air and hits an enemy.
+ * 
+ * @param {Object} enemy - The enemy that the character is colliding with.
+ * @param {number} index - The index of the enemy in the `this.level.enemies` array.
+ */
+    handleEnemyCollision(enemy, index) {
+        if (this.character.y > 100 &amp;&amp; !this.pepeInTheAir &amp;&amp; !enemy.isDeadEnemies()) {
+            this.handleCharacterHit();
+        } else if (this.pepeInTheAir &amp;&amp; !this.endbossActivated) {
+            this.handleCharacterInAirHit(enemy, index);
+        }
+    }
+
+    handleCharacterHit() {
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.energy);
+    }
+
+    handleCharacterInAirHit(enemy, index) {
+        enemy.hitEnemies();
+        enemy.speed = 0;
+        this.pepeInTheAir = false;
+        this.chickenHitted.playSound();
+
+        setTimeout(() => {
+            this.level.enemies.splice(index, 1);
+        }, 500);
+    }
+
+    checkCollisionsWithEndboss() {
+        const endboss = this.level.enemies[this.level.enemies.length - 1];
+        if (this.character.isColliding(endboss)) {
+            this.handleCharacterHit();
+        }
+    }
+
+    checkCoinCollected() {
+        this.level.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin)) {
+                this.coinCollected.playSound();
+                this.character.coins += 20;
+                this.coinBar.setPercentage(this.character.coins);
+                this.level.coins.splice(index, 1);
+            }
+        });
+    }
+
+    checkBottleCollected() {
+        this.level.bottles.forEach((bottle, index) => {
+            if (this.character.isColliding(bottle) &amp;&amp; this.character.bottles &lt; this.character.maxBottles) {
+                this.character.bottles++;
+                this.fillBottle.playSound();
+                let percent = (this.character.bottles / this.character.maxBottles) * 100;
+                this.bottleBar.setPercentage(percent);
+                this.level.bottles.splice(index, 1);
+            }
+        });
+    }
+
+    checkThrowObjects() {
+        const now = Date.now();
+        const throwCooldown = 400;
+
+        if (
+            this.keyboard.D &amp;&amp;
+            this.character.bottles > 0 &amp;&amp;
+            now - this.lastBottleThrow > throwCooldown
+        ) {
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            this.throwableObjects.push(bottle);
+
+            this.character.bottles--;
+            let percent = (this.character.bottles / this.character.maxBottles) * 100;
+            this.bottleBar.setPercentage(percent);
+
+            this.lastBottleThrow = now;
+        }
+    }
+
+    draw() {
+        this.clearCanvas();
+        this.handleCameraTranslation();
+        this.addBackgroundObjectsToMap();
+        this.addCharacterToMap();
+        this.addCloudsAndEnemiesToMap();
+        this.addFixedObjectsToMap();
+        this.addThrowableObjectsAndItemsToMap();
+        this.resetCameraTranslation();
+        this.requestNextFrame();
+    }
+
+    clearCanvas() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    handleCameraTranslation() {
+        this.ctx.translate(this.camera_x, 0);
+    }
+
+    addBackgroundObjectsToMap() {
+        this.addObjectsToMap(this.level.backgroundObjects);
+    }
+
+    addCharacterToMap() {
+        this.addToMap(this.character);
+    }
+
+    addCloudsAndEnemiesToMap() {
+        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.enemies);
+    }
+
+    addFixedObjectsToMap() {
+        this.ctx.translate(-this.camera_x, 0);
+        this.addToMap(this.bottleBar);
+        this.addToMap(this.coinBar);
+        this.addToMap(this.healthBar);
+        this.addToMap(this.healthBarEnboss);
+        this.addToMap(this.exitGame);
+        this.ctx.translate(this.camera_x, 0);
+    }
+
+    addThrowableObjectsAndItemsToMap() {
+        this.addObjectsToMap(this.throwableObjects);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
+    }
+
+    resetCameraTranslation() {
+        this.ctx.translate(-this.camera_x, 0);
+    }
+
+    requestNextFrame() {
+        let self = this;
+        requestAnimationFrame(function () {
+            self.draw();
+        });
+    }
+
+    /**
+ * Adds multiple objects to the map by drawing them on the canvas.
+ * Iterates over each object in the `objects` array and calls `addToMap()` for each.
+ * 
+ * @param {Array} objects - An array of objects to be added to the map.
+ * Each object should have a `draw` method and may have a `flipImage` property.
+ */
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o)
+        })
+    }
+
+    /**
+ * Adds a single object to the map by drawing it on the canvas and drawing its frame.
+ * If the object is facing the opposite direction, it flips the image horizontally.
+ * 
+ * @param {Object} mo - The object to be added to the map. The object should have:
+ *   - `otherDirection` (boolean): A flag indicating if the object should be flipped horizontally.
+ *   - `draw` (function): A method to draw the object on the canvas.
+ *   - `drawFrame` (function): A method to draw the object's collision frame (if applicable).
+ */
+    addToMap(mo) {
+        if (mo.otherDirection) {
+            this.flipImage(mo)
+        }
+
+        mo.draw(this.ctx);
+        mo.drawFrame(this.ctx)
+
+
+        if (mo.otherDirection) {
+            this.flipImageBack(mo)
+        }
+    }
+
+    /**
+ * Flips an object horizontally on the canvas by saving the current canvas state,
+ * translating the context, and scaling the image negatively.
+ * 
+ * @param {Object} mo - The object to be flipped. The object should have a `width` and `x` property.
+ */
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0)
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+
+    /**
+ * Restores the canvas state after flipping an object and flips the object's x-coordinate back.
+ * 
+ * @param {Object} mo - The object to be flipped back. The object should have an `x` property.
+ */
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore();
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottles.html">Bottles</a></li><li><a href="Level.html">Level</a></li><li><a href="Sounds.html">Sounds</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 09 2025 13:34:43 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
