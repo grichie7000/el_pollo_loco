@@ -129,8 +129,8 @@ class Character extends MoveableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
-                clearAllIntervals();
                 setTimeout(() => {
+                    clearAllIntervals();
                     gameOver();
                 }, 1000);
             } else if (this.isHurt()) {

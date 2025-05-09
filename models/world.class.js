@@ -8,6 +8,7 @@ class World {
     camera_x = 0;
     healthCooldown = 0;
     lastBottleThrow = 0;
+
     healthBar = new StatusBar(100,
         [
             'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
@@ -77,6 +78,10 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        const boss = this.endboss;
+        if (boss) {
+            boss.world = this;
+        }
     }
 
     run() {
@@ -87,12 +92,41 @@ class World {
             this.checkBottleCollected()
             this.checkThrowObjects();
             this.checkEndbossTrigger();
+            this.checkBottleHitsEnemies();
         }, 100);
+    }
+
+    checkBottleHitsEnemies() {
+        this.throwableObjects.forEach((bottle) => {
+            if (bottle.hasHit) return;
+            
+            this.level.enemies.forEach((enemy, enemyIndex) => {
+                if (bottle.isColliding(enemy)) {
+                    enemy.hitEnemies();
+
+                    if (enemy.isDeadEnemies()) {
+                        this.level.enemies[enemyIndex].speed = 0;
+                        setTimeout(() => {
+                            this.level.enemies.splice(enemyIndex, 1);
+                        }, 500);
+                    }
+
+                    bottle.handleHit();
+                }
+            });
+
+            // Prüfe Endboss
+            const boss = this.endboss;
+            if (boss && boss.bossActive && bottle.isColliding(boss)) {
+                boss.hit();
+                this.healthBarEnboss.setPercentage(boss.energy);
+                bottle.handleHit(); 
+            }
+        });
     }
 
     checkInTheAir() {
         if (this.character.y < 0) {
-            console.log('luft');
             this.pepeInTheAir = true;
         }
     }
@@ -120,6 +154,7 @@ class World {
                         this.character.hit();
                         this.healthBar.setPercentage(this.character.energy);
                     } else if (this.pepeInTheAir && !this.endbossActivated) {
+
                         this.level.enemies[index].hitEnemies()
                         this.level.enemies[index].speed = 0;
                         this.pepeInTheAir = false;
@@ -131,7 +166,7 @@ class World {
                 }
             });
 
-        } else if(this.character.isColliding(this.level.enemies[this.level.enemies.length - 1])){
+        } else if (this.character.isColliding(this.level.enemies[this.level.enemies.length - 1])) {
             this.character.hit();
             this.healthBar.setPercentage(this.character.energy);
         }
@@ -246,4 +281,5 @@ class World {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
+
 }

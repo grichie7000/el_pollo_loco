@@ -10,7 +10,7 @@ class DrawableObject {
 
     drawFrame(ctx) {
         if (this instanceof Character || this instanceof Chicken || this instanceof Coins 
-            || this instanceof Bottles || this instanceof Endboss || this instanceof LittleChicken) {
+            || this instanceof Bottles || this instanceof Endboss || this instanceof LittleChicken || this instanceof ThrowableObject) {
             const offsetX = this instanceof Character ? this.hitboxOffsetX || 0 : this.collisionOffsetX || 0;
             const offsetY = this instanceof Character ? this.hitboxOffsetY || 0 : this.collisionOffsetY || 0;
 
@@ -23,7 +23,7 @@ class DrawableObject {
                 this.width - 2 * offsetX,
                 this.height - offsetY
             );
-            ctx.stroke();
+            // ctx.stroke();
         }
     }
 

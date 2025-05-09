@@ -1,5 +1,9 @@
 class ThrowableObject extends MoveableObject {
 
+    collisionOffsetX = 30;
+    collisionOffsetY = -10;
+
+
     constructor(x, y) {
         super();
         this.x = x;
@@ -22,16 +26,14 @@ class ThrowableObject extends MoveableObject {
     }
 
     throw() {
-        this.speedY = 30;
+        this.speedY = 20;
         this.applyGravity();
 
-        let interval = setInterval(() => {
+        this.throwInterval = setInterval(() => {
             this.x += 10;
 
-            if (this.y > 350 && !this.hasHit) {
-                this.hasHit = true;
-                clearInterval(interval);
-
+            if (this.y > 350) {
+                clearInterval(this.throwInterval);
                 this.playSplashAnimation();
             }
         }, 25);
@@ -53,5 +55,15 @@ class ThrowableObject extends MoveableObject {
                 }
             }
         }, 100);
+    }
+
+    handleHit() {
+        if (!this.hasHit) {
+            this.hasHit = true;
+
+            clearInterval(this.throwInterval); 
+            this.speedY = 0;                    
+            this.playSplashAnimation();        
+        }
     }
 }

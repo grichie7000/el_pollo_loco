@@ -16,13 +16,15 @@ class MoveableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
-    isAboveGround() {
-        if (this instanceof ThrowableObject) {
-            return this.y < 350;
-        } else {
-            return this.y < 130;
-        }
+isAboveGround() {
+    if (this instanceof ThrowableObject) {
+        return this.y < 350;
+    } else if (this instanceof Endboss) {
+        return this.y < -45; 
+    } else {
+        return this.y < 130;
     }
+}
 
     isColliding(mo) {
         const offsetCharX = this instanceof Character ? this.hitboxOffsetX || 0 : this.collisionOffsetX || 0;
@@ -46,6 +48,14 @@ class MoveableObject extends DrawableObject {
         }
     }
 
+    handleHit() {
+        if (!this.hasHit) {
+            this.hasHit = true;
+            this.speedY = 0;
+            this.playSplashAnimation();
+        }
+    }
+
     isHurt() {
         const now = new Date().getTime();
         let timepassed = now - this.lastHit;
@@ -60,11 +70,8 @@ class MoveableObject extends DrawableObject {
 
     hitEnemies() {
         this.energy -= 20;
-
-        if (this.energy < 0) {
+        if (this.energy <= 0) {
             this.energy = 0;
-        }else {
-            this.lastHit = new Date().getTime();
         }
     }
 

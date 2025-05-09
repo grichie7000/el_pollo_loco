@@ -51,10 +51,10 @@ function initLevel() {
         ],
         [
             new Bottles (-50),
-            new Bottles (380),
-            new Bottles (1050),
-            new Bottles (1490),
-            new Bottles (1750)
+            new Bottles (-50),
+            new Bottles (-50),
+            new Bottles (-50),
+            new Bottles (-50)
         ]
     );
 }
