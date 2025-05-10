@@ -9,6 +9,10 @@ class World {
     healthCooldown = 0;
     lastBottleThrow = 0;
     exitGame = new ExitGame();
+    buttonLeft = new ButtonLeft();
+    buttonRight = new ButtonRight();
+    buttonUp = new ButtonUp();
+    buttonThrow = new ButtonThrow();
     throwableObjects = [];
     endbossActivated = false;
     healthBarTriggerd = false;
@@ -269,8 +273,8 @@ class World {
         this.addBackgroundObjectsToMap();
         this.addCharacterToMap();
         this.addCloudsAndEnemiesToMap();
-        this.addFixedObjectsToMap();
         this.addThrowableObjectsAndItemsToMap();
+        this.addFixedObjectsToMap();
         this.resetCameraTranslation();
         this.requestNextFrame();
     }
@@ -303,6 +307,7 @@ class World {
         this.addToMap(this.healthBar);
         this.addToMap(this.healthBarEnboss);
         this.addToMap(this.exitGame);
+        this.loadMobileButtons()
         this.ctx.translate(this.camera_x, 0);
     }
 
@@ -321,6 +326,15 @@ class World {
         requestAnimationFrame(function () {
             self.draw();
         });
+    }
+
+    loadMobileButtons() {
+        if (isMobileDevice()) {
+            this.addToMap(this.buttonLeft);
+            this.addToMap(this.buttonRight);
+            this.addToMap(this.buttonUp);
+            this.addToMap(this.buttonThrow);
+        }
     }
 
     /**

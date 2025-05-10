@@ -1,5 +1,7 @@
 
 function initStartScreen() {
+    checkDeviceSize();
+    turnDevice()
     document.getElementById('bg-music-volume').value = progressValue;
 }
 
@@ -17,7 +19,7 @@ function stopGame() {
     startTheGame.classList.remove("disappear")
     gameOverScreen.style.display = 'none';
     canvas.style.display = 'none';
-    startTheGame.style.display = 'flex';
+    startTheGame.style.display = 'block';
 
     const winScreen = document.querySelector('.winner-screen');
     if (winScreen) {
@@ -96,7 +98,6 @@ function pauseMusic() {
 function toggleFullscreen() {
     if (!isFullscreen) {
         startFullscreen();
-
     } else {
         leaveFullscreen();
     }
@@ -111,6 +112,8 @@ function startFullscreen() {
         document.documentElement.msRequestFullscreen();
     }
 
+    headline.classList.add('d_none')
+    canvas.classList.add('fullscreen-canvas');
     fullscreenImg.src = "./icons/minimize.png";
     isFullscreen = true;
 }
@@ -124,10 +127,24 @@ function leaveFullscreen() {
         document.msExitFullscreen();
     }
 
+    headline.classList.remove('d_none')
+    canvas.classList.remove('fullscreen-canvas')
     fullscreenImg.src = "./icons/maximize.png";
     isFullscreen = false;
+    document.body.offsetHeight;
 }
 
+/**
+ * Switches between keyboard layout settings and audio settings views
+ * based on the selected menu item.
+ *
+ * @param {number} menuItem - The selected menu item. 
+ * Use `1` to show keyboard layout settings, or `2` to show audio settings.
+ *
+ * @example
+ * switchSettings(1); // Activates keyboard layout settings
+ * switchSettings(2); // Activates audio settings
+ */
 function switchSettings(menuItem) {
     if (menuItem == 1) {
         keyboardLayout.classList.add("activ");

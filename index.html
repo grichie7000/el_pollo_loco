@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="./style.css">
 
+
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/moveable-object.class.js"></script>
     <script src="./models/character.class.js"></script>
@@ -28,16 +29,21 @@
     <script src="./models/endboss.class.js"></script>
     <script src="./models/levels/level1.js"></script>
     <script src="./models/exit-game.class.js"></script>
+    <script src="./models/button-left.class.js"></script>
+    <script src="./models/button-right.class.js"></script>
+    <script src="./models/button-up.class.js"></script>
+    <script src="./models/button-throw.class.js"></script>
     <script src="./scripts/game.js"></script>
     <script src="./scripts/start-screen.js"></script>
-
+    <script src="./scripts/mobile-screen.js"></script>
 </head>
 
 <body onload="init()">
 
-    <h1>El Pollo Loco</h1>
+    <h1 id="headline">El Pollo Loco</h1>
     <canvas id="canvas" width="720px" height="480px"></canvas>
-
+    <p id="warning-screen" class="d_none">screen too small please change device</p>
+    <p id="mobile-device" class="d_none">Please turn the device</p>
     <div id="start-screen">
         <div class="start-screen-buttons">
             <div class="menu-buttons" id="start-button" onclick="startGame()">Start</div>

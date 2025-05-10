@@ -17,8 +17,8 @@ let musicIsPlaying;
 let volumeBtn;
 
 function init() {
-    getElements()
-    initStartScreen()
+    getElements();
+    initStartScreen();
 }
 
 function clearAllIntervals() {
@@ -101,6 +101,7 @@ function endBossFight() {
 
 function getElements() {
     canvas = document.getElementById('canvas');
+    headline = document.getElementById('headline')
     startTheGame = document.getElementById('start-screen');
     gameSettings = document.getElementById('game-settings');
     impressumSite = document.getElementById('impressum-site');
@@ -111,4 +112,6 @@ function getElements() {
     audioSettings = document.getElementById('audio-settings');
     keyboardLayout = document.getElementById('keyboard-layout');
     gameOverScreen = document.getElementById('game-over');
+    warningScreen = document.getElementById('warning-screen');
+    mobileDevice = document.getElementById('mobile-device');
 }
