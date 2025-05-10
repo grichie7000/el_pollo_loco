@@ -2,7 +2,7 @@ class ThrowableObject extends MoveableObject {
 
     collisionOffsetX = 30;
     collisionOffsetY = -10;
-    glassBreak = new Sounds('audio/glass-break.mp3', 0.5)
+    glassBreak = new Sounds('audio/glass-break.mp3', 0.2)
 
     /**
  * Creates an instance of the ThrowableObject class, initializing its position, splash images,

@@ -21,8 +21,8 @@ class World {
     }
     pepeInTheAir = false;
     fillBottle = new Sounds('audio/fill_bottle.mp3', 0.5)
-    coinCollected = new Sounds('audio/kaching.mp3', 0.5)
-    chickenHitted = new Sounds('audio/boing.mp3', 0.5)
+    coinCollected = new Sounds('audio/kaching.mp3', 0.2)
+    chickenHitted = new Sounds('audio/boing.mp3', 0.2)
 
     healthBar = new StatusBar(100,
         [

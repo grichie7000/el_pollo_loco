@@ -9,7 +9,7 @@ class Character extends MoveableObject {
     timeToBeAfk = 200;
     jumpSound = new Sounds('audio/jump.mp3', 0.1)
     walkSound = new Sounds('audio/walking.mp3', 0.1)
-    hurtSound = new Sounds('audio/ough.mp3', 0.5)
+    hurtSound = new Sounds('audio/ough.mp3', 0.2)
     world;
     gameOverImage;
 
