@@ -25,7 +25,6 @@ function turnDevice(width, height) {
         gameSettings.style.display = 'none';
         impressumSite.style.display = 'none';
         mobileDevice.classList.remove('d_none');
-        console.log("Das Gerät ist im Hochformat.");
     } else {
         startTheGame.style.display = 'block';
         mobileDevice.classList.add('d_none');

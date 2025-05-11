@@ -6,6 +6,7 @@ class LittleChicken extends MoveableObject {
     collisionOffsetX = 20;
     collisionOffsetY = 0;
     energy = 20;
+    
 
     IMAGES_WALKING = [
         'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
@@ -16,12 +17,12 @@ class LittleChicken extends MoveableObject {
         'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
     ]
 
-    constructor() {
+    constructor(spawnOffset) {
         super().loadImage('./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
 
-        this.x = 400 + Math.random() * 1000;
+        this.x = spawnOffset;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate()
     }

@@ -153,21 +153,22 @@ class World {
         bottle.handleHit();
     }
 
-    checkEndbossTrigger() {
-        const triggerX = 1750;
-        if (this.character.x >= triggerX && !this.endbossActivated) {
-            const boss = this.endboss;
-            if (boss) {
-                boss.bossActive = true;
-                startBossFight();
-                this.endbossActivated = true;
-                if (!this.healthBarTriggerd) {
-                    this.healthBarEnboss.setPercentage(80);
-                    this.healthBarTriggerd = true;
-                }
+checkEndbossTrigger() {
+    const triggerX = 1750;
+    if (this.character.x >= triggerX && !this.endbossActivated) {
+        const boss = this.endboss;
+        if (boss) {
+            boss.activateBoss();  // ✅ Jetzt startet er erst hier
+            startBossFight();
+            this.endbossActivated = true;
+
+            if (!this.healthBarTriggerd) {
+                this.healthBarEnboss.setPercentage(80);
+                this.healthBarTriggerd = true;
             }
         }
     }
+}
 
     checkCollision() {
         if (!this.endbossActivated) {
@@ -220,7 +221,9 @@ class World {
     checkCollisionsWithEndboss() {
         const endboss = this.level.enemies[this.level.enemies.length - 1];
         if (this.character.isColliding(endboss)) {
-            this.handleCharacterHit();
+            this.character.hit();
+            this.healthBar.setPercentage(0);
+            this.character.energy = 0;
         }
     }
 
@@ -249,7 +252,7 @@ class World {
 
     checkThrowObjects() {
         const now = Date.now();
-        const throwCooldown = 400;
+        const throwCooldown = 800;
 
         if (
             this.keyboard.D &&

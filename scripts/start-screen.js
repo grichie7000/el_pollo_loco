@@ -69,7 +69,7 @@ function checkMuteButton() {
     const checkVolumeBtn = document.getElementById('volume-btn');
     const iconPath = new URL(checkVolumeBtn.src).pathname;
 
-    if (iconPath === '/icons/volume-mute.png') {
+    if (iconPath === 'icons/volume-mute.png') {
         return true
     }
 }
@@ -84,14 +84,14 @@ function toggleMusic() {
 
 function playMusic() {
     bgMusic.play();
-    volumeBtn.src = "./icons/volume-up.png";
+    volumeBtn.src = "icons/volume-up.png";
     bgMusic.volume = savedVolume;
     musicIsPlaying = true;
 }
 
 function pauseMusic() {
     bgMusic.pause();
-    volumeBtn.src = "./icons/volume-mute.png";
+    volumeBtn.src = "icons/volume-mute.png";
     musicIsPlaying = false;
 }
 

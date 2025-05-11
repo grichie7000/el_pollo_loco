@@ -3,7 +3,7 @@ class Bottles extends MoveableObject {
     height = 96;
     width = 96;
     counter = 1;
-    collisionOffsetX = 20;
+    collisionOffsetX = 45;
     collisionOffsetY = 0;
     IMAGES = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',

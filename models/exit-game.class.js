@@ -86,7 +86,7 @@ class ExitGame extends DrawableObject {
         const { x: mouseX, y: mouseY } = this.getMousePos(canvas, event);
 
         if (this.isClicked(mouseX, mouseY)) {
-            stopGame(); // Call your game-ending logic here
+            stopGame();
         }
     }
 }

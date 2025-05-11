@@ -12,10 +12,10 @@ class Endboss extends MoveableObject {
     collisionOffsetY = 0;
 
     IMAGES_WALKING = [
-        '../img/4_enemie_boss_chicken/1_walk/G1.png',
-        '../img/4_enemie_boss_chicken/1_walk/G2.png',
-        '../img/4_enemie_boss_chicken/1_walk/G3.png',
-        '../img/4_enemie_boss_chicken/1_walk/G4.png',
+        'img/4_enemie_boss_chicken/1_walk/G1.png',
+        'img/4_enemie_boss_chicken/1_walk/G2.png',
+        'img/4_enemie_boss_chicken/1_walk/G3.png',
+        'img/4_enemie_boss_chicken/1_walk/G4.png',
     ];
 
     IMAGES_ALERT = [
@@ -57,9 +57,13 @@ class Endboss extends MoveableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.speed = 0.5;
         this.applyGravity();
-        this.startPhaseCycle();
-        this.animate();
     }
+
+    activateBoss() {
+    this.bossActive = true;
+    this.startPhaseCycle();
+    this.animate();
+}
 
     hit() {
         super.hit();
@@ -74,8 +78,8 @@ class Endboss extends MoveableObject {
         }
     }
 
-    animate() {
-        setInterval(() => {
+    animate () {
+        this.animationInterval = setInterval(() => {
             if (this.bossActive && this.isWalking) {
                 this.moveLeft();
             } else if (this.bossActive && this.isAttacking) {
@@ -117,7 +121,7 @@ class Endboss extends MoveableObject {
             }
 
             phase = (phase + 1) % 3;
-        }, 4000);
+        }, 1000);
     }
 
     resetPhases() {
@@ -139,8 +143,20 @@ class Endboss extends MoveableObject {
         this.isAttacking = true;
         this.speed = 2;
 
-        if (this.isAboveGround()) return;
-        this.speedY = 40;
-        this.applyGravity();
+        if (!this.isAboveGround()) {
+            this.speedY = 20;
+            this.applyGravity();
+        }
+
+        let jumpDistance = 300;
+        let steps = 10;
+        let stepSize = jumpDistance / steps;
+        let currentStep = 0;
+
+        let jumpInterval = setInterval(() => {
+            this.x -= stepSize;
+            currentStep++;
+            if (currentStep >= steps) clearInterval(jumpInterval);
+        }, 30);
     }
 }
