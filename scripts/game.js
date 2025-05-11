@@ -20,15 +20,26 @@ savedVolume = savedVolume !== null ? parseFloat(savedVolume) : 1;
 let progressValue = savedVolume * 100;
 let musicIsPlaying = false;
 
+/**
+ * Initializes the game elements and the start screen.
+ */
 function init() {
     getElements();
     initStartScreen();
 }
 
+/**
+ * Clears all intervals that are currently set.
+ */
 function clearAllIntervals() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
 
+/**
+ * Handles the keydown event to track key presses and update the keyboard state.
+ * 
+ * @param {KeyboardEvent} event - The keydown event.
+ */
 window.addEventListener('keydown', (event) => {
     if (event.keyCode == 39) {
         keyboard.RIGHT = true;
@@ -60,6 +71,11 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
+/**
+ * Handles the keyup event to track key releases and update the keyboard state.
+ * 
+ * @param {KeyboardEvent} event - The keyup event.
+ */
 window.addEventListener('keyup', (event) => {
     if (event.keyCode == 39) {
         keyboard.RIGHT = false;
@@ -86,13 +102,18 @@ window.addEventListener('keyup', (event) => {
     }
 });
 
+/**
+ * Pauses the background music when the boss fight starts.
+ */
 function startBossFight() {
     if (!checkMuteButton()) {
         bgMusic.pause();
     }
-
 }
 
+/**
+ * Retrieves the necessary DOM elements for the game and stores them in variables.
+ */
 function getElements() {
     canvas = document.getElementById('canvas');
     headline = document.getElementById('headline')

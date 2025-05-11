@@ -28,6 +28,12 @@ class World {
     coinCollected = new Sounds('audio/kaching.mp3', 0.2)
     chickenHitted = new Sounds('audio/boing.mp3', 0.2)
 
+    /**
+        * Creates an instance of the World class.
+        * 
+        * @param {HTMLCanvasElement} canvas - The canvas element for the game.
+        * @param {Keyboard} keyboard - The keyboard instance for input handling.
+        */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -39,6 +45,9 @@ class World {
         this.preventZoomAndScroll(canvas);
     }
 
+    /**
+     * Initializes the world, setting up the character and boss (if applicable).
+     */
     setWorld() {
         this.character.world = this;
         const boss = this.endboss;
@@ -47,38 +56,45 @@ class World {
         }
     }
 
+    /**
+     * Runs the game logic at regular intervals.
+     */
     run() {
         setInterval(() => {
-            this.checkInTheAir()
+            this.checkInTheAir();
             this.checkCollision();
             this.checkCoinCollected();
-            this.checkBottleCollected()
+            this.checkBottleCollected();
             this.checkThrowObjects();
             this.checkEndbossTrigger();
             this.checkBottleHitsEnemies();
         }, 100);
     }
 
+    /**
+     * Prevents zoom and scroll on the canvas element (used on mobile).
+     * 
+     * @param {HTMLCanvasElement} canvas - The canvas element.
+     */
     preventZoomAndScroll(canvas) {
-        // Verhindere das Scrollen mit dem Maus-Scrollrad
         canvas.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
-
-        // Verhindere Touch-Zoom und Touch-Scrollen
         canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
         canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-
-        // Verhindere das Kontextmenü (Rechtsklick und lange Berührung)
         canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     }
 
-
-
+    /**
+     * Checks if the character is in the air.
+     */
     checkInTheAir() {
         if (this.character.y < 0) {
             this.pepeInTheAir = true;
         }
     }
 
+    /**
+     * Checks for bottle collisions with enemies and the boss.
+     */
     checkBottleHitsEnemies() {
         this.throwableObjects.forEach((bottle) => {
             if (bottle.hasHit) return;
@@ -88,6 +104,11 @@ class World {
         });
     }
 
+    /**
+     * Checks for bottle collisions with enemies.
+     * 
+     * @param {ThrowableObject} bottle - The bottle object.
+     */
     checkBottleCollisionsWithEnemies(bottle) {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             if (bottle.isColliding(enemy)) {
@@ -96,6 +117,13 @@ class World {
         });
     }
 
+    /**
+     * Handles a collision between a bottle and an enemy.
+     * 
+     * @param {ThrowableObject} bottle - The bottle object.
+     * @param {Enemy} enemy - The enemy that was hit.
+     * @param {number} enemyIndex - The index of the enemy in the `this.level.enemies` array.
+     */
     handleEnemyHit(bottle, enemy, enemyIndex) {
         enemy.hitEnemies();
 
@@ -109,6 +137,11 @@ class World {
         bottle.handleHit();
     }
 
+    /**
+     * Checks for bottle collisions with the boss.
+     * 
+     * @param {ThrowableObject} bottle - The bottle object.
+     */
     checkBottleCollisionsWithBoss(bottle) {
         const boss = this.endboss;
         if (boss && boss.bossActive && bottle.isColliding(boss)) {
@@ -116,18 +149,27 @@ class World {
         }
     }
 
+    /**
+     * Handles a collision between a bottle and the boss.
+     * 
+     * @param {ThrowableObject} bottle - The bottle object.
+     * @param {Endboss} boss - The boss object.
+     */
     handleBossHit(bottle, boss) {
         boss.hit();
         this.healthBarEnboss.setPercentage(boss.energy);
         bottle.handleHit();
     }
 
+    /**
+     * Checks if the endboss should be triggered based on the character's position.
+     */
     checkEndbossTrigger() {
         const triggerX = 1750;
         if (this.character.x >= triggerX && !this.endbossActivated) {
             const boss = this.endboss;
             if (boss) {
-                boss.activateBoss();  // ✅ Jetzt startet er erst hier
+                boss.activateBoss();
                 startBossFight();
                 this.endbossActivated = true;
 
@@ -139,6 +181,9 @@ class World {
         }
     }
 
+    /**
+     * Checks for collisions between the character and enemies or the endboss.
+     */
     checkCollision() {
         if (!this.endbossActivated) {
             this.checkCollisionsWithEnemies();
@@ -147,6 +192,9 @@ class World {
         }
     }
 
+    /**
+     * Checks for collisions between the character and enemies.
+     */
     checkCollisionsWithEnemies() {
         this.level.enemies.forEach((enemy, index) => {
             if (this.character.isColliding(enemy)) {
@@ -156,13 +204,13 @@ class World {
     }
 
     /**
-    * Handles the collision between the character and an enemy.
-    * Depending on the conditions, it either processes a regular character hit or
-    * handles the case where the character is in the air and hits an enemy.
-    * 
-    * @param {Object} enemy - The enemy that the character is colliding with.
-    * @param {number} index - The index of the enemy in the `this.level.enemies` array.
-    */
+     * Handles the collision between the character and an enemy.
+     * Depending on the conditions, it either processes a regular character hit or
+     * handles the case where the character is in the air and hits an enemy.
+     * 
+     * @param {Object} enemy - The enemy that the character is colliding with.
+     * @param {number} index - The index of the enemy in the `this.level.enemies` array.
+     */
     handleEnemyCollision(enemy, index) {
         if (this.character.y > 100 && !this.pepeInTheAir && !enemy.isDeadEnemies()) {
             this.handleCharacterHit();
@@ -171,11 +219,20 @@ class World {
         }
     }
 
+    /**
+     * Handles the character being hit by an enemy.
+     */
     handleCharacterHit() {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
     }
 
+    /**
+     * Handles the character being in the air and hitting an enemy.
+     * 
+     * @param {Object} enemy - The enemy that the character hit.
+     * @param {number} index - The index of the enemy in the `this.level.enemies` array.
+     */
     handleCharacterInAirHit(enemy, index) {
         enemy.hitEnemies();
         enemy.speed = 0;
@@ -187,6 +244,9 @@ class World {
         }, 500);
     }
 
+    /**
+     * Checks for collisions between the character and the endboss.
+     */
     checkCollisionsWithEndboss() {
         const endboss = this.level.enemies[this.level.enemies.length - 1];
         if (this.character.isColliding(endboss)) {
@@ -196,6 +256,9 @@ class World {
         }
     }
 
+    /**
+     * Checks for collected coins.
+     */
     checkCoinCollected() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
@@ -207,6 +270,9 @@ class World {
         });
     }
 
+    /**
+     * Checks for collected bottles.
+     */
     checkBottleCollected() {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle) && this.character.bottles < this.character.maxBottles) {
@@ -219,6 +285,9 @@ class World {
         });
     }
 
+    /**
+     * Checks for thrown objects (bottles).
+     */
     checkThrowObjects() {
         const now = Date.now();
         const throwCooldown = 800;
@@ -239,6 +308,9 @@ class World {
         }
     }
 
+    /**
+     * Draws the game objects to the canvas.
+     */
     draw() {
         this.clearCanvas();
         this.handleCameraTranslation();
@@ -251,27 +323,45 @@ class World {
         this.requestNextFrame();
     }
 
+    /**
+     * Clears the canvas.
+     */
     clearCanvas() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    /**
+     * Handles camera translation.
+     */
     handleCameraTranslation() {
         this.ctx.translate(this.camera_x, 0);
     }
 
+    /**
+     * Adds background objects to the map.
+     */
     addBackgroundObjectsToMap() {
         this.addObjectsToMap(this.level.backgroundObjects);
     }
 
+    /**
+     * Adds the character to the map.
+     */
     addCharacterToMap() {
         this.addToMap(this.character);
     }
 
+    /**
+     * Adds clouds and enemies to the map.
+     */
     addCloudsAndEnemiesToMap() {
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
     }
 
+    /**
+     * Adds fixed objects (e.g., UI elements) to the map.
+     */
     addFixedObjectsToMap() {
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.bottleBar);
@@ -279,20 +369,29 @@ class World {
         this.addToMap(this.healthBar);
         this.addToMap(this.healthBarEnboss);
         this.addToMap(this.exitGame);
-        this.loadMobileButtons()
+        this.loadMobileButtons();
         this.ctx.translate(this.camera_x, 0);
     }
 
+    /**
+     * Adds throwable objects and items to the map.
+     */
     addThrowableObjectsAndItemsToMap() {
         this.addObjectsToMap(this.throwableObjects);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
     }
 
+    /**
+     * Resets camera translation.
+     */
     resetCameraTranslation() {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+    /**
+     * Requests the next animation frame.
+     */
     requestNextFrame() {
         let self = this;
         requestAnimationFrame(function () {
@@ -300,6 +399,9 @@ class World {
         });
     }
 
+    /**
+     * Loads mobile-specific buttons if the device supports touch.
+     */
     loadMobileButtons() {
         if (isTouch) {
             this.addToMap(this.buttonLeft);
@@ -310,59 +412,52 @@ class World {
     }
 
     /**
-    * Adds multiple objects to the map by drawing them on the canvas.
-    * Iterates over each object in the `objects` array and calls `addToMap()` for each.
-    * 
-    * @param {Array} objects - An array of objects to be added to the map.
-    * Each object should have a `draw` method and may have a `flipImage` property.
-    */
+     * Adds multiple objects to the map by drawing them on the canvas.
+     * 
+     * @param {Array} objects - An array of objects to be added to the map.
+     * Each object should have a `draw` method and may have a `flipImage` property.
+     */
     addObjectsToMap(objects) {
         objects.forEach(o => {
-            this.addToMap(o)
-        })
+            this.addToMap(o);
+        });
     }
 
     /**
-    * Adds a single object to the map by drawing it on the canvas and drawing its frame.
-    * If the object is facing the opposite direction, it flips the image horizontally.
-    * 
-    * @param {Object} mo - The object to be added to the map. The object should have:
-    *   - `otherDirection` (boolean): A flag indicating if the object should be flipped horizontally.
-    *   - `draw` (function): A method to draw the object on the canvas.
-    *   - `drawFrame` (function): A method to draw the object's collision frame (if applicable).
-    */
+     * Adds a single object to the map by drawing it on the canvas.
+     * 
+     * @param {Object} mo - The object to be added to the map.
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
-            this.flipImage(mo)
+            this.flipImage(mo);
         }
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx)
-
+        mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
-            this.flipImageBack(mo)
+            this.flipImageBack(mo);
         }
     }
 
     /**
-    * Flips an object horizontally on the canvas by saving the current canvas state,
-    * translating the context, and scaling the image negatively.
-    * 
-    * @param {Object} mo - The object to be flipped. The object should have a `width` and `x` property.
-    */
+     * Flips an object horizontally on the canvas.
+     * 
+     * @param {Object} mo - The object to be flipped.
+     */
     flipImage(mo) {
         this.ctx.save();
-        this.ctx.translate(mo.width, 0)
+        this.ctx.translate(mo.width, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * -1;
     }
 
     /**
-    * Restores the canvas state after flipping an object and flips the object's x-coordinate back.
-    * 
-    * @param {Object} mo - The object to be flipped back. The object should have an `x` property.
-    */
+     * Flips the object back to its original orientation.
+     * 
+     * @param {Object} mo - The object to be flipped back.
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();

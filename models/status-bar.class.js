@@ -31,6 +31,9 @@ class StatusBar extends DrawableObject {
         this.img = this.imageCache[path];
     }
 
+    /**
+ * Resolve the index from the Image Array. for display the health. 
+ */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;

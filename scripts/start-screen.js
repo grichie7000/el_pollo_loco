@@ -1,10 +1,17 @@
-
+/**
+ * Initializes the start screen by checking orientation, updating the volume icon, 
+ * and setting the initial value of the background music volume.
+ */
 function initStartScreen() {
     checkOrientationAndShowMessage()
     updateVolumeIcon();
     document.getElementById('bg-music-volume').value = progressValue;
 }
 
+/**
+ * Starts the game by loading the music setting, initializing the game level, 
+ * and displaying the world after a short delay.
+ */
 function startGame() {
     loadMusicSetting();
     startTheGame.classList.add("disappear")
@@ -16,7 +23,10 @@ function startGame() {
     }, 500);
 }
 
-
+/**
+ * Stops the game by removing the start screen, hiding the canvas, 
+ * and resetting variables related to the game state.
+ */
 function stopGame() {
     startTheGame.classList.remove("disappear")
     gameOverScreen.style.display = 'none';
@@ -27,6 +37,9 @@ function stopGame() {
     clearAllIntervals();
 }
 
+/**
+ * Displays the winner screen and resumes background music if not muted.
+ */
 function showWinnerScreen() {
     canvas.style.display = 'none';
     winScreen.style.display = 'block';
@@ -37,6 +50,9 @@ function showWinnerScreen() {
     clearAllIntervals();
 }
 
+/**
+ * Displays the game over screen and resumes background music if not muted.
+ */
 function gameOver() {
     canvas.style.display = 'none';
     gameOverScreen.style.display = 'block';
@@ -45,16 +61,25 @@ function gameOver() {
     }
 }
 
+/**
+ * Shows the game settings menu.
+ */
 function showgameSettings() {
     startTheGame.style.display = 'none';
     gameSettings.style.display = 'flex';
 }
 
+/**
+ * Opens the impressum page.
+ */
 function openImpressum() {
     startTheGame.style.display = 'none';
     impressumSite.style.display = 'flex';
 }
 
+/**
+ * Navigates back to the main menu and resets the layout settings.
+ */
 function backToMenu() {
     startTheGame.style.display = 'flex';
     gameSettings.style.display = 'none';
@@ -64,6 +89,10 @@ function backToMenu() {
     showKeyboard();
 }
 
+/**
+ * Loads the music settings, such as whether the music is muted or not, 
+ * and applies the saved volume level.
+ */
 function loadMusicSetting() {
     const musicSetting = localStorage.getItem('musicMuted');
     const saved = localStorage.getItem('volume');
@@ -76,10 +105,18 @@ function loadMusicSetting() {
     }
 }
 
+/**
+ * Checks if the music is muted.
+ * 
+ * @returns {boolean} True if the music is muted, false otherwise.
+ */
 function checkMuteButton() {
     return localStorage.getItem('musicMuted') === 'true';
 }
 
+/**
+ * Toggles the music between play and pause.
+ */
 function toggleMusic() {
     if (!musicIsPlaying) {
         playMusic();
@@ -88,6 +125,10 @@ function toggleMusic() {
     }
 }
 
+/**
+ * Plays the background music, updates the volume icon, 
+ * and stores the music state in localStorage.
+ */
 function playMusic() {
     bgMusic.play();
     volumeBtn.src = "icons/volume-up.png";
@@ -96,6 +137,10 @@ function playMusic() {
     localStorage.setItem('musicMuted', 'false');
 }
 
+/**
+ * Pauses the background music, updates the volume icon, 
+ * and stores the music state in localStorage.
+ */
 function pauseMusic() {
     bgMusic.pause();
     volumeBtn.src = "icons/volume-mute.png";
@@ -103,6 +148,9 @@ function pauseMusic() {
     localStorage.setItem('musicMuted', 'true')
 }
 
+/**
+ * Toggles the fullscreen mode by either entering or leaving fullscreen.
+ */
 function toggleFullscreen() {
     if (!isFullscreen) {
         startFullscreen();
@@ -111,6 +159,9 @@ function toggleFullscreen() {
     }
 }
 
+/**
+ * Updates the volume icon based on the music mute status stored in localStorage.
+ */
 function updateVolumeIcon() {
     const musicSetting = localStorage.getItem('musicMuted');
     if (musicSetting === 'true') {
@@ -120,6 +171,9 @@ function updateVolumeIcon() {
     }
 }
 
+/**
+ * Enters fullscreen mode by requesting the fullscreen API and adjusting the UI.
+ */
 function startFullscreen() {
     if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
@@ -135,6 +189,9 @@ function startFullscreen() {
     isFullscreen = true;
 }
 
+/**
+ * Leaves fullscreen mode by requesting to exit fullscreen and adjusting the UI.
+ */
 function leaveFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -154,10 +211,10 @@ function leaveFullscreen() {
 /**
  * Switches between keyboard layout settings and audio settings views
  * based on the selected menu item.
- *
+ * 
  * @param {number} menuItem - The selected menu item. 
  * Use `1` to show keyboard layout settings, or `2` to show audio settings.
- *
+ * 
  * @example
  * switchSettings(1); // Activates keyboard layout settings
  * switchSettings(2); // Activates audio settings
@@ -174,19 +231,30 @@ function switchSettings(menuItem) {
         keyboardLayout.classList.remove("activ");
         showAudio()
     }
-
 }
 
+/**
+ * Displays the keyboard layout settings.
+ */
 function showKeyboard() {
     document.getElementById('display-audio-settings').style.display = 'none'
     document.getElementById('display-keyboard-layout').style.display = 'block'
 }
 
+/**
+ * Displays the audio settings.
+ */
 function showAudio() {
     document.getElementById('display-audio-settings').style.display = 'flex'
     document.getElementById('display-keyboard-layout').style.display = 'none'
 }
 
+/**
+ * Changes the volume based on the button clicked and updates the volume display.
+ * 
+ * @param {HTMLElement} button - The volume button clicked.
+ * @param {number} delta - The amount by which to change the volume.
+ */
 function changeVolume(button, delta) {
     const progress = button.parentElement.querySelector('progress');
     let newVolume = parseInt(progress.value) + delta;

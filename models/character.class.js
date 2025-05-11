@@ -75,6 +75,9 @@ class Character extends MoveableObject {
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ]
 
+    /**
+         * Creates a new Character instance, initializes image sets, sounds, physics, and starts animation.
+         */
     constructor() {
         super().loadImage('./img/2_character_pepe/2_walk/W-21.png')
         this.coins = 1;
@@ -91,6 +94,9 @@ class Character extends MoveableObject {
         this.animate();
     }
 
+    /**
+     * Starts movement and animation loops to continuously update character behavior.
+     */
     animate() {
         setInterval(() => {
             this.handleMovement();
@@ -101,6 +107,9 @@ class Character extends MoveableObject {
         this.playAnimations();
     }
 
+    /**
+     * Handles character movement based on keyboard input (left/right).
+     */
     handleMovement() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
@@ -117,6 +126,9 @@ class Character extends MoveableObject {
         }
     }
 
+    /**
+     * Handles jump logic based on keyboard input and ground status.
+     */
     handleJump() {
         if (this.world.keyboard.UP && !this.isAboveGround()) {
             this.jump();
@@ -125,14 +137,23 @@ class Character extends MoveableObject {
         }
     }
 
+    /**
+     * Updates the horizontal position of the camera based on character's X-coordinate.
+     */
     updateCameraPosition() {
         this.world.camera_x = -this.x + 100;
     }
 
+    /**
+     * Resets the inactivity (AFK) timer for idle animations.
+     */
     resetAfkTime() {
         this.afkTimeInSeconds = 0;
     }
 
+    /**
+     * Plays animation frames depending on the current state of the character.
+     */
     playAnimations() {
         setInterval(() => {
             if (this.isDead()) {
@@ -158,12 +179,18 @@ class Character extends MoveableObject {
         }, 120);
     }
 
+    /**
+     * Plays walking sound if the character is on the ground.
+     */
     playWalkingSound() {
         if (!this.isAboveGround()) {
             this.walkSound.playSound();
         }
     }
 
+    /**
+     * Plays hurt sound with a cooldown to avoid overlap.
+     */
     playHurtSound() {
         const now = new Date().getTime();
         if (!this.lastHurtSoundTime || now - this.lastHurtSoundTime > 500) {
@@ -172,6 +199,9 @@ class Character extends MoveableObject {
         }
     }
 
+    /**
+     * Makes the character jump by assigning a vertical speed.
+     */
     jump() {
         this.speedY = 30;
     }

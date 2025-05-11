@@ -24,6 +24,9 @@ class Bottles extends MoveableObject {
         this.animate();
     }
 
+    /**
+ * Controls which animation to play based on whether the chicken is alive or dead.
+ */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES)

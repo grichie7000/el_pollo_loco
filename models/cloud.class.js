@@ -5,6 +5,9 @@ class Cloud extends MoveableObject {
     height = 250;
     speed = 0.15;
 
+    /**
+     * Creates an instance of the Cloud class, setting its initial position and starting its animation.
+     */
     constructor() {
         super().loadImage('./img/5_background/layers/4_clouds/1.png');
 
@@ -12,9 +15,12 @@ class Cloud extends MoveableObject {
         this.animate();
     }
 
+    /**
+     * Starts the animation of the cloud by continuously moving it to the left.
+     */
     animate() {
         setInterval(() => {
-            this.moveLeft()
+            this.moveLeft();
         }, 1000 / 60);
     }
 }

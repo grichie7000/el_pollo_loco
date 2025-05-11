@@ -1,6 +1,13 @@
+/**
+ * Represents a virtual "Throw" button for touch controls.
+ * Inherits from DrawableObject.
+ */
 class ButtonThrow extends DrawableObject {
-    IMAGES = ['icons/touchD.png'];
+    IMAGES = ['icons/touchThrow.png'];
 
+    /**
+     * Initializes the button and registers relevant touch event listeners.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -11,15 +18,24 @@ class ButtonThrow extends DrawableObject {
         canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
     }
 
+    /**
+     * Sets the position, size, and image for the throw button.
+     */
     setIcon() {
         let path = this.IMAGES[0];
-        this.x = canvas.width - 130;
-        this.y = canvas.height - 200;
+        this.x = canvas.width - 150; // Adjust as needed
+        this.y = canvas.height - 270; // Adjust position for better layout
         this.width = 120;
         this.height = 120;
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Gets the position of the touch event relative to the canvas.
+     * @param {HTMLCanvasElement} canvas 
+     * @param {TouchEvent} event 
+     * @returns {{x: number, y: number}}
+     */
     getTouchPos(canvas, event) {
         const rect = canvas.getBoundingClientRect();
         const touch = event.touches[0] || event.changedTouches[0];
@@ -29,15 +45,26 @@ class ButtonThrow extends DrawableObject {
         };
     }
 
+    /**
+     * Checks whether the button has been touched.
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {boolean}
+     */
     isTouched(x, y) {
         return x >= this.x && x <= this.x + this.width &&
-            y >= this.y && y <= this.y + this.height;
+               y >= this.y && y <= this.y + this.height;
     }
 
+    /**
+     * Handles the touch interaction and updates the keyboard state for throwing.
+     * @param {TouchEvent} event 
+     * @param {boolean} pressed 
+     */
     handleTouch(event, pressed) {
         const { x, y } = this.getTouchPos(canvas, event);
         if (this.isTouched(x, y)) {
-            keyboard.D = pressed;
+            keyboard.THROW = pressed;
         }
     }
 }

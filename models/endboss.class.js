@@ -49,6 +49,9 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
 
+    /**
+     * Creates an instance of the Endboss class and loads all animations and images.
+     */
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -60,6 +63,9 @@ class Endboss extends MoveableObject {
         this.applyGravity();
     }
 
+    /**
+     * Activates the endboss, starts the phase cycle and plays the boss music.
+     */
     activateBoss() {
         this.bossActive = true;
         this.startPhaseCycle();
@@ -67,6 +73,9 @@ class Endboss extends MoveableObject {
         this.bossMusic.playSound();
     }
 
+    /**
+     * Reduces the boss's energy when hit, updates health bar, and shows winner screen if dead.
+     */
     hit() {
         super.hit();
         if (this.isDead()) {
@@ -80,6 +89,9 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Starts movement and attack logic depending on the boss's state.
+     */
     animate() {
         this.animationInterval = setInterval(() => {
             if (this.bossActive && this.isWalking) {
@@ -92,6 +104,9 @@ class Endboss extends MoveableObject {
         this.playAnimations();
     }
 
+    /**
+     * Plays appropriate animation based on the boss's current state.
+     */
     playAnimations() {
         setInterval(() => {
             if (this.isDead()) {
@@ -108,6 +123,9 @@ class Endboss extends MoveableObject {
         }, 200);
     }
 
+    /**
+     * Starts the boss's phase cycle (walking → alert → attacking) in a loop.
+     */
     startPhaseCycle() {
         this.bossActive = true;
         let phase = 0;
@@ -126,6 +144,9 @@ class Endboss extends MoveableObject {
         }, 1000);
     }
 
+    /**
+     * Resets all phase states and sets speed to default.
+     */
     resetPhases() {
         this.isWalking = false;
         this.isInAlert = false;
@@ -133,14 +154,23 @@ class Endboss extends MoveableObject {
         this.speed = 0.5;
     }
 
+    /**
+     * Activates walking state.
+     */
     walk() {
         this.isWalking = true;
     }
 
+    /**
+     * Activates alert state.
+     */
     alert() {
         this.isInAlert = true;
     }
 
+    /**
+     * Activates attack state and initiates a jump attack if not on the ground.
+     */
     attack() {
         this.isAttacking = true;
         this.speed = 2;

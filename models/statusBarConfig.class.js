@@ -1,4 +1,4 @@
-// statusBarConfigs.js
+// statusBarConfigs
 
 const healthBarConfig = {
     initial: 100,
