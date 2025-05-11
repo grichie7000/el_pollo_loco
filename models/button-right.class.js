@@ -15,6 +15,7 @@ class ButtonRight extends DrawableObject {
 
         canvas.addEventListener('touchstart', (e) => this.handleTouch(e, true), { passive: false });
         canvas.addEventListener('touchend', (e) => this.handleTouch(e, false), { passive: false });
+        canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
         canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
     }
 
@@ -23,8 +24,8 @@ class ButtonRight extends DrawableObject {
      */
     setIcon() {
         let path = this.IMAGES[0];
-        this.x = canvas.width - 150; // Adjust as needed
-        this.y = canvas.height - 150;
+        this.x = 170;
+        this.y = canvas.height - 145;
         this.width = 120;
         this.height = 120;
         this.img = this.imageCache[path];

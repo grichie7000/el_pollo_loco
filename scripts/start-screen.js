@@ -27,7 +27,7 @@ function startGame() {
  * Stops the game by removing the start screen, hiding the canvas, 
  * and resetting variables related to the game state.
  */
-function stopGame() {
+function stopGame(tryAgain) {
     startTheGame.classList.remove("disappear")
     gameOverScreen.style.display = 'none';
     winScreen.style.display = 'none';
@@ -35,6 +35,10 @@ function stopGame() {
     startTheGame.style.display = 'block';
     isTouch = false;
     clearAllIntervals();
+    if (tryAgain == true) {
+        startGame();
+        tryAgain = false;
+    }
 }
 
 /**
@@ -46,7 +50,6 @@ function showWinnerScreen() {
     if (!checkMuteButton()) {
         bgMusic.play();
     }
-
     clearAllIntervals();
 }
 

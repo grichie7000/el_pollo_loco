@@ -15,6 +15,7 @@ class ButtonUp extends DrawableObject {
 
         canvas.addEventListener('touchstart', (e) => this.handleTouch(e, true), { passive: false });
         canvas.addEventListener('touchend', (e) => this.handleTouch(e, false), { passive: false });
+        canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
         canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
     }
 

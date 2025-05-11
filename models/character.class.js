@@ -118,7 +118,7 @@ class Character extends MoveableObject {
             this.playWalkingSound();
         }
 
-        if (this.world.keyboard.LEFT && this.x > 0) {
+        if (this.world.keyboard.LEFT && this.x > 120) {
             this.moveLeft();
             this.otherDirection = true;
             this.resetAfkTime();

@@ -238,6 +238,7 @@ class World {
         enemy.speed = 0;
         this.pepeInTheAir = false;
         this.chickenHitted.playSound();
+        this.character.speedY = 20;
 
         setTimeout(() => {
             this.level.enemies.splice(index, 1);

@@ -3,7 +3,7 @@
  * Inherits from DrawableObject.
  */
 class ButtonThrow extends DrawableObject {
-    IMAGES = ['icons/touchThrow.png'];
+    IMAGES = ['icons/touchD.png'];
 
     /**
      * Initializes the button and registers relevant touch event listeners.
@@ -15,6 +15,7 @@ class ButtonThrow extends DrawableObject {
 
         canvas.addEventListener('touchstart', (e) => this.handleTouch(e, true), { passive: false });
         canvas.addEventListener('touchend', (e) => this.handleTouch(e, false), { passive: false });
+        canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
         canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
     }
 
@@ -23,8 +24,8 @@ class ButtonThrow extends DrawableObject {
      */
     setIcon() {
         let path = this.IMAGES[0];
-        this.x = canvas.width - 150; // Adjust as needed
-        this.y = canvas.height - 270; // Adjust position for better layout
+        this.x = canvas.width - 130;
+        this.y = canvas.height - 200;
         this.width = 120;
         this.height = 120;
         this.img = this.imageCache[path];
@@ -53,7 +54,7 @@ class ButtonThrow extends DrawableObject {
      */
     isTouched(x, y) {
         return x >= this.x && x <= this.x + this.width &&
-               y >= this.y && y <= this.y + this.height;
+            y >= this.y && y <= this.y + this.height;
     }
 
     /**
@@ -64,7 +65,7 @@ class ButtonThrow extends DrawableObject {
     handleTouch(event, pressed) {
         const { x, y } = this.getTouchPos(canvas, event);
         if (this.isTouched(x, y)) {
-            keyboard.THROW = pressed;
+            keyboard.D = pressed;
         }
     }
 }
