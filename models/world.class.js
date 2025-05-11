@@ -239,7 +239,9 @@ class World {
         this.pepeInTheAir = false;
         this.chickenHitted.playSound();
         this.character.speedY = 20;
-
+        if (this.character.y > 130) {
+            this.character.y = 130;
+        }
         setTimeout(() => {
             this.level.enemies.splice(index, 1);
         }, 500);

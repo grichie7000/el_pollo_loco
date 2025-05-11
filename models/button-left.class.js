@@ -68,5 +68,16 @@ class ButtonLeft extends DrawableObject {
             keyboard.LEFT = pressed;
         }
     }
+
+    /**
+ * Handles the touch interaction and updates the keyboard state.
+ * @param {TouchEvent} event 
+ */
+    handleTouchMove(event) {
+        const { x, y } = this.getTouchPos(canvas, event);
+        if (!this.isTouched(x, y)) {
+            keyboard.LEFT = false;
+        }
+    }
 }
 
