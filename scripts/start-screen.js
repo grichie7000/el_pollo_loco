@@ -1,11 +1,12 @@
 
 function initStartScreen() {
-    checkDeviceSize();
-    turnDevice()
+    checkOrientationAndShowMessage()
+    updateVolumeIcon();
     document.getElementById('bg-music-volume').value = progressValue;
 }
 
 function startGame() {
+    loadMusicSetting();
     startTheGame.classList.add("disappear")
     initLevel()
     world = new World(canvas, keyboard);
@@ -15,35 +16,33 @@ function startGame() {
     }, 500);
 }
 
+
 function stopGame() {
     startTheGame.classList.remove("disappear")
     gameOverScreen.style.display = 'none';
+    winScreen.style.display = 'none';
     canvas.style.display = 'none';
     startTheGame.style.display = 'block';
+    isTouch = false;
+    clearAllIntervals();
+}
 
-    const winScreen = document.querySelector('.winner-screen');
-    if (winScreen) {
-        winScreen.remove();
+function showWinnerScreen() {
+    canvas.style.display = 'none';
+    winScreen.style.display = 'block';
+    if (!checkMuteButton()) {
+        bgMusic.play();
     }
 
     clearAllIntervals();
 }
 
-function showWinnerScreen() {
-    let winScreen = document.createElement('img');
-    winScreen.src = 'img/You won, you lost/You Win A.png';
-
-    winScreen.classList.add('winner-screen');
-
-    document.body.appendChild(winScreen);
-    endBossFight()
-    clearAllIntervals();
-}
-
 function gameOver() {
-    endBossFight()
     canvas.style.display = 'none';
     gameOverScreen.style.display = 'block';
+    if (!checkMuteButton()) {
+        bgMusic.play();
+    }
 }
 
 function showgameSettings() {
@@ -65,13 +64,20 @@ function backToMenu() {
     showKeyboard();
 }
 
-function checkMuteButton() {
-    const checkVolumeBtn = document.getElementById('volume-btn');
-    const iconPath = new URL(checkVolumeBtn.src).pathname;
+function loadMusicSetting() {
+    const musicSetting = localStorage.getItem('musicMuted');
+    const saved = localStorage.getItem('volume');
+    if (saved) savedVolume = saved;
 
-    if (iconPath === 'icons/volume-mute.png') {
-        return true
+    if (musicSetting === 'true') {
+        pauseMusic();
+    } else {
+        playMusic();
     }
+}
+
+function checkMuteButton() {
+    return localStorage.getItem('musicMuted') === 'true';
 }
 
 function toggleMusic() {
@@ -87,12 +93,14 @@ function playMusic() {
     volumeBtn.src = "icons/volume-up.png";
     bgMusic.volume = savedVolume;
     musicIsPlaying = true;
+    localStorage.setItem('musicMuted', 'false');
 }
 
 function pauseMusic() {
     bgMusic.pause();
     volumeBtn.src = "icons/volume-mute.png";
     musicIsPlaying = false;
+    localStorage.setItem('musicMuted', 'true')
 }
 
 function toggleFullscreen() {
@@ -100,6 +108,15 @@ function toggleFullscreen() {
         startFullscreen();
     } else {
         leaveFullscreen();
+    }
+}
+
+function updateVolumeIcon() {
+    const musicSetting = localStorage.getItem('musicMuted');
+    if (musicSetting === 'true') {
+        volumeBtn.src = "icons/volume-mute.png";
+    } else {
+        volumeBtn.src = "icons/volume-up.png";
     }
 }
 

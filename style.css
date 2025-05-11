@@ -53,10 +53,6 @@ canvas {
     pointer-events: none;
 }
 
-#warning-screen {
-    text-align: center;
-}
-
 #mobile-device {
     text-align: center;
 }
@@ -85,7 +81,6 @@ canvas {
     position: relative;
 }
 
-
 .game-over-screen img {
     height: 379px;
     width: 701px;
@@ -105,6 +100,31 @@ canvas {
     text-decoration: underline;
 }
 
+.win-screen {
+    height: 405px;
+    width: 720px;
+    display: none;
+    position: relative;
+}
+
+.win-screen img {
+    height: 379px;
+    width: 701px;
+}
+
+.win-screen p {
+    padding: 12px;
+    position: absolute;
+    bottom: 0;
+    border: 2px solid #d5d5364d;
+    background-color: #d5d5364d;
+    border-radius: 10px;
+}
+
+.win-screen p:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
 
 .fullscreen img {
     height: 36px;
@@ -343,14 +363,9 @@ progress::-moz-progress-bar {
 
 @media (max-width: 719px) {
 
-    .game-over-screen {
-        height: 300px;
-        width: 500px;
-    }
-
     #impressum-site {
         height: 320px;
-        width: 600px;
+        width: 550px;
     }
 
     #impressum-site img {
@@ -361,7 +376,7 @@ progress::-moz-progress-bar {
 
     .imprint {
         font-size: 18px;
-        width: 380px;
+        width: 354px;
         height: 270px;
         margin-left: 16px;
     }
@@ -374,7 +389,7 @@ progress::-moz-progress-bar {
 
     #game-settings {
         height: 320px;
-        width: 600px;
+        width: 550px;
     }
 
     .menu-buttons {
@@ -397,7 +412,7 @@ progress::-moz-progress-bar {
 
     #start-screen {
         height: 320px;
-        width: 600px;
+        width: 550px;
     }
 
     canvas {
@@ -419,6 +434,11 @@ progress::-moz-progress-bar {
         right: 72px;
     }
 
+    .game-over-screen {
+        height: 300px;
+        width: 500px;
+    }
+
     .game-over-screen img {
         height: 280px;
         width: 460px;
@@ -428,6 +448,23 @@ progress::-moz-progress-bar {
         padding: 8px;
         font-size: 18px;
     }
+
+    .win-screen {
+        height: 300px;
+        width: 500px;
+
+    }
+
+    .win-screen img {
+        height: 280px;
+        width: 460px;
+    }
+
+    .win-screen p {
+        padding: 8px;
+        font-size: 18px;
+    }
+
 }
 
 @media (max-height: 479px) {
@@ -436,14 +473,9 @@ progress::-moz-progress-bar {
         height: 100vh;
     }
 
-    .game-over-screen {
-        height: 300px;
-        width: 500px;
-    }
-
     #impressum-site {
         height: 320px;
-        width: 600px;
+        width: 550px;
     }
 
     #impressum-site img {
@@ -454,7 +486,7 @@ progress::-moz-progress-bar {
 
     .imprint {
         font-size: 18px;
-        width: 380px;
+        width: 354px;
         height: 270px;
         margin-left: 16px;
     }
@@ -467,7 +499,7 @@ progress::-moz-progress-bar {
 
     #game-settings {
         height: 320px;
-        width: 600px;
+        width: 550px;
     }
 
     .menu-buttons {
@@ -490,7 +522,7 @@ progress::-moz-progress-bar {
 
     #start-screen {
         height: 320px;
-        width: 600px;
+        width: 550px;
     }
 
     .setting-menu {
@@ -508,12 +540,33 @@ progress::-moz-progress-bar {
         right: 72px;
     }
 
+    .game-over-screen {
+        height: 300px;
+        width: 500px;
+    }
+
     .game-over-screen img {
         height: 280px;
         width: 460px;
     }
 
     .game-over-screen p {
+        padding: 8px;
+        font-size: 18px;
+    }
+
+    .win-screen {
+        height: 300px;
+        width: 500px;
+
+    }
+
+    .win-screen img {
+        height: 280px;
+        width: 460px;
+    }
+
+    .win-screen p {
         padding: 8px;
         font-size: 18px;
     }

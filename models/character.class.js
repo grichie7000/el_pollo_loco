@@ -133,10 +133,6 @@ class Character extends MoveableObject {
         this.afkTimeInSeconds = 0;
     }
 
-    playWalkingSound() {
-        this.walkingSound.play();
-    }
-
     playAnimations() {
         setInterval(() => {
             if (this.isDead()) {

@@ -1,5 +1,9 @@
 class World {
 
+    healthBar = new StatusBar(healthBarConfig.initial, healthBarConfig.images, healthBarConfig.x, healthBarConfig.y);
+    coinBar = new StatusBar(coinBarConfig.initial, coinBarConfig.images, coinBarConfig.x, coinBarConfig.y);
+    bottleBar = new StatusBar(bottleBarConfig.initial, bottleBarConfig.images, bottleBarConfig.x, bottleBarConfig.y);
+    healthBarEnboss = new StatusBar(healthBarEndbossConfig.initial, healthBarEndbossConfig.images, healthBarEndbossConfig.x, healthBarEndbossConfig.y);
     character = new Character();
     level = level1;
     canvas;
@@ -24,54 +28,6 @@ class World {
     coinCollected = new Sounds('audio/kaching.mp3', 0.2)
     chickenHitted = new Sounds('audio/boing.mp3', 0.2)
 
-    healthBar = new StatusBar(100,
-        [
-            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-            'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
-        ],
-        30, 80
-    );
-
-    coinBar = new StatusBar(0,
-        [
-            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png',
-            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png',
-            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png',
-            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png',
-            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png',
-            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png',
-        ],
-        30, 40
-    );
-
-    bottleBar = new StatusBar(0,
-        [
-            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
-            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
-            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
-            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
-            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
-            'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
-        ],
-        30, 0
-    );
-
-    healthBarEnboss = new StatusBar(100,
-        [
-            'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
-            'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
-            'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
-            'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
-            'img/7_statusbars/2_statusbar_endboss/blue/blue100.png',
-            'img/7_statusbars/2_statusbar_endboss/blue/blue0.png'
-        ],
-        30, 410
-    );
-
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -80,6 +36,7 @@ class World {
         this.draw();
         this.setWorld();
         this.run();
+        this.preventZoomAndScroll(canvas);
     }
 
     setWorld() {
@@ -100,6 +57,18 @@ class World {
             this.checkEndbossTrigger();
             this.checkBottleHitsEnemies();
         }, 100);
+    }
+
+    preventZoomAndScroll(canvas) {
+        // Verhindere das Scrollen mit dem Maus-Scrollrad
+        canvas.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+
+        // Verhindere Touch-Zoom und Touch-Scrollen
+        canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+        canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+
+        // Verhindere das Kontextmenü (Rechtsklick und lange Berührung)
+        canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     }
 
 
@@ -153,22 +122,22 @@ class World {
         bottle.handleHit();
     }
 
-checkEndbossTrigger() {
-    const triggerX = 1750;
-    if (this.character.x >= triggerX && !this.endbossActivated) {
-        const boss = this.endboss;
-        if (boss) {
-            boss.activateBoss();  // ✅ Jetzt startet er erst hier
-            startBossFight();
-            this.endbossActivated = true;
+    checkEndbossTrigger() {
+        const triggerX = 1750;
+        if (this.character.x >= triggerX && !this.endbossActivated) {
+            const boss = this.endboss;
+            if (boss) {
+                boss.activateBoss();  // ✅ Jetzt startet er erst hier
+                startBossFight();
+                this.endbossActivated = true;
 
-            if (!this.healthBarTriggerd) {
-                this.healthBarEnboss.setPercentage(80);
-                this.healthBarTriggerd = true;
+                if (!this.healthBarTriggerd) {
+                    this.healthBarEnboss.setPercentage(80);
+                    this.healthBarTriggerd = true;
+                }
             }
         }
     }
-}
 
     checkCollision() {
         if (!this.endbossActivated) {
@@ -187,13 +156,13 @@ checkEndbossTrigger() {
     }
 
     /**
- * Handles the collision between the character and an enemy.
- * Depending on the conditions, it either processes a regular character hit or
- * handles the case where the character is in the air and hits an enemy.
- * 
- * @param {Object} enemy - The enemy that the character is colliding with.
- * @param {number} index - The index of the enemy in the `this.level.enemies` array.
- */
+    * Handles the collision between the character and an enemy.
+    * Depending on the conditions, it either processes a regular character hit or
+    * handles the case where the character is in the air and hits an enemy.
+    * 
+    * @param {Object} enemy - The enemy that the character is colliding with.
+    * @param {number} index - The index of the enemy in the `this.level.enemies` array.
+    */
     handleEnemyCollision(enemy, index) {
         if (this.character.y > 100 && !this.pepeInTheAir && !enemy.isDeadEnemies()) {
             this.handleCharacterHit();
@@ -332,7 +301,7 @@ checkEndbossTrigger() {
     }
 
     loadMobileButtons() {
-        if (isMobileDevice()) {
+        if (isTouch) {
             this.addToMap(this.buttonLeft);
             this.addToMap(this.buttonRight);
             this.addToMap(this.buttonUp);
@@ -341,12 +310,12 @@ checkEndbossTrigger() {
     }
 
     /**
- * Adds multiple objects to the map by drawing them on the canvas.
- * Iterates over each object in the `objects` array and calls `addToMap()` for each.
- * 
- * @param {Array} objects - An array of objects to be added to the map.
- * Each object should have a `draw` method and may have a `flipImage` property.
- */
+    * Adds multiple objects to the map by drawing them on the canvas.
+    * Iterates over each object in the `objects` array and calls `addToMap()` for each.
+    * 
+    * @param {Array} objects - An array of objects to be added to the map.
+    * Each object should have a `draw` method and may have a `flipImage` property.
+    */
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o)
@@ -354,14 +323,14 @@ checkEndbossTrigger() {
     }
 
     /**
- * Adds a single object to the map by drawing it on the canvas and drawing its frame.
- * If the object is facing the opposite direction, it flips the image horizontally.
- * 
- * @param {Object} mo - The object to be added to the map. The object should have:
- *   - `otherDirection` (boolean): A flag indicating if the object should be flipped horizontally.
- *   - `draw` (function): A method to draw the object on the canvas.
- *   - `drawFrame` (function): A method to draw the object's collision frame (if applicable).
- */
+    * Adds a single object to the map by drawing it on the canvas and drawing its frame.
+    * If the object is facing the opposite direction, it flips the image horizontally.
+    * 
+    * @param {Object} mo - The object to be added to the map. The object should have:
+    *   - `otherDirection` (boolean): A flag indicating if the object should be flipped horizontally.
+    *   - `draw` (function): A method to draw the object on the canvas.
+    *   - `drawFrame` (function): A method to draw the object's collision frame (if applicable).
+    */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo)
@@ -377,11 +346,11 @@ checkEndbossTrigger() {
     }
 
     /**
- * Flips an object horizontally on the canvas by saving the current canvas state,
- * translating the context, and scaling the image negatively.
- * 
- * @param {Object} mo - The object to be flipped. The object should have a `width` and `x` property.
- */
+    * Flips an object horizontally on the canvas by saving the current canvas state,
+    * translating the context, and scaling the image negatively.
+    * 
+    * @param {Object} mo - The object to be flipped. The object should have a `width` and `x` property.
+    */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0)
@@ -390,10 +359,10 @@ checkEndbossTrigger() {
     }
 
     /**
- * Restores the canvas state after flipping an object and flips the object's x-coordinate back.
- * 
- * @param {Object} mo - The object to be flipped back. The object should have an `x` property.
- */
+    * Restores the canvas state after flipping an object and flips the object's x-coordinate back.
+    * 
+    * @param {Object} mo - The object to be flipped back. The object should have an `x` property.
+    */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();

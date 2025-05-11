@@ -28,7 +28,7 @@ class DrawableObject {
                 this.width - 2 * offsetX,
                 this.height - offsetY
             );
-            ctx.stroke();
+            // ctx.stroke();
         }
     }
 

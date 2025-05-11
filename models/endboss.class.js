@@ -10,6 +10,7 @@ class Endboss extends MoveableObject {
     isAttacking = false;
     collisionOffsetX = 50;
     collisionOffsetY = 0;
+    bossMusic = new Sounds('audio/boss-music.mp3', 0.2)
 
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -60,10 +61,11 @@ class Endboss extends MoveableObject {
     }
 
     activateBoss() {
-    this.bossActive = true;
-    this.startPhaseCycle();
-    this.animate();
-}
+        this.bossActive = true;
+        this.startPhaseCycle();
+        this.animate();
+        this.bossMusic.playSound();
+    }
 
     hit() {
         super.hit();
@@ -78,7 +80,7 @@ class Endboss extends MoveableObject {
         }
     }
 
-    animate () {
+    animate() {
         this.animationInterval = setInterval(() => {
             if (this.bossActive && this.isWalking) {
                 this.moveLeft();

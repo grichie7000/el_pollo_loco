@@ -1,20 +1,24 @@
 let canvas;
+let headline;
 let startTheGame;
 let gameSettings;
 let impressumSite;
+let fullscreenImg;
+let bgMusic;
+let volumeBtn;
+let audioSettings;
+let keyboardLayout;
+let gameOverScreen;
+let winScreen;
 let world;
+let mobileDevice;
 let keyboard = new Keyboard();
 let keyHandled = false;
 let isFullscreen = false;
-let fullscreenImg;
-let audioSettings;
-let keyboardLayout;
-let bgMusic;
 let savedVolume = localStorage.getItem('volume');
 savedVolume = savedVolume !== null ? parseFloat(savedVolume) : 1;
 let progressValue = savedVolume * 100;
-let musicIsPlaying;
-let volumeBtn;
+let musicIsPlaying = false;
 
 function init() {
     getElements();
@@ -85,16 +89,6 @@ window.addEventListener('keyup', (event) => {
 function startBossFight() {
     if (!checkMuteButton()) {
         bgMusic.pause();
-        bossMusic.currentTime = 0;
-        bossMusic.play();
-    }
-
-}
-
-function endBossFight() {
-    if (!checkMuteButton()) {
-        bossMusic.pause();
-        bgMusic.play();
     }
 
 }
@@ -107,11 +101,11 @@ function getElements() {
     impressumSite = document.getElementById('impressum-site');
     fullscreenImg = document.getElementById('fullscreen-btn');
     bgMusic = document.getElementById('bg-music');
-    bossMusic = document.getElementById('boss-music');
     volumeBtn = document.getElementById('volume-btn');
     audioSettings = document.getElementById('audio-settings');
     keyboardLayout = document.getElementById('keyboard-layout');
     gameOverScreen = document.getElementById('game-over');
-    warningScreen = document.getElementById('warning-screen');
+    winScreen = document.getElementById('win');
     mobileDevice = document.getElementById('mobile-device');
 }
+

@@ -16,17 +16,12 @@ class Sounds {
         if (!this.checkMuteButton() && !this.cooldown) {
             this.sound.currentTime = 0;
             this.sound.play();
-            this.stopRepeat()
+            this.stopRepeat();
         }
     }
 
     checkMuteButton() {
-        const checkVolumeBtn = document.getElementById('volume-btn');
-        const iconPath = new URL(checkVolumeBtn.src).pathname;
-
-        if (iconPath === '/icons/volume-mute.png') {
-            return true
-        }
+        return localStorage.getItem('musicMuted') === 'true';
     }
 
     stopRepeat() {

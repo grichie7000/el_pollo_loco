@@ -6,8 +6,9 @@ class ButtonRight extends DrawableObject {
         this.loadImages(this.IMAGES);
         this.setIcon();
 
-        canvas.addEventListener('touchstart', (e) => this.handleTouch(e, true));
-        canvas.addEventListener('touchend', (e) => this.handleTouch(e, false));
+        canvas.addEventListener('touchstart', (e) => this.handleTouch(e, true), { passive: false });
+        canvas.addEventListener('touchend', (e) => this.handleTouch(e, false), { passive: false });
+        canvas.addEventListener('contextmenu', (e) => e.preventDefault(), { passive: false });
     }
 
     setIcon() {
